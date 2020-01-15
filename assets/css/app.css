@@ -1,0 +1,82 @@
+/* This file is for your main application css. */
+
+@import "./phoenix.css";
+@import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+.exc-tick {
+  stroke: grey;
+}
+
+.exc-tick text {
+  fill: grey;
+  stroke: none;
+}
+
+.exc-grid {
+  stroke: lightgrey;
+}
+
+.exc-legend {
+  stroke: black;
+}
+
+.exc-legend text {
+  fill: grey;
+  font-size: 0.8rem;
+  stroke: none;
+}
+
+.exc-title {
+  fill: darkslategray;
+  font-size: 2.3rem;
+  stroke: none;
+}
+.exc-subtitle {
+  fill: darkgrey;
+  font-size: 1.0rem;
+  stroke: none;
+}
+
+.exc-domain {
+  stroke:  rgb(207, 207, 207);
+}
+
+.exc-barlabel-in {
+  fill: white;
+  font-size: 0.7rem;
+}
+
+.exc-barlabel-out {
+  fill: grey;
+  font-size: 0.7rem;
+}
+
+
+.navbar {
+  margin-bottom: 10px;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #606c76;
+}
+
+.navbar li {
+    float: left;
+    margin-bottom: 0;
+}
+
+.navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar li a:hover {
+    background-color: #76828b;
+}

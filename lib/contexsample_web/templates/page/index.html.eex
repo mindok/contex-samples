@@ -1,0 +1,21 @@
+<section class="phx-hero">
+  <h1>ContEx</h1>
+  <p>A flexible charting library for Elixir server side charting.</p>
+</section>
+
+<section class="row">
+  <article class="column">
+    <h2>Resources</h2>
+    <ul>
+      <li>
+        <a href="#">Guides &amp; Docs - coming soonish</a>
+      </li>
+      <li>
+        <a href="https://github.com/mindok/contex">Source</a>
+      </li>
+      <li>
+        <a href="https://github.com/mindok/contex/CHANGELOG.md">Changelog</a>
+      </li>
+    </ul>
+  </article>
+</section>

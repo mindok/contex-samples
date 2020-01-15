@@ -7,6 +7,7 @@ defmodule ContexSampleWeb.BarPlotLive do
   def render(assigns) do
     ~L"""
       <h3>Simple Bar Plot Example</h3>
+      <p>Source code can be found <a href="https://github.com/mindok/contex-samples/blob/master/lib/contexsample_web/live/barplot.ex">on Github</a></p>
       <div class="container">
         <div class="row">
           <div class="column column-25">
@@ -80,9 +81,7 @@ defmodule ContexSampleWeb.BarPlotLive do
     {:noreply, socket}
   end
 
-  def handle_event("chart1_bar_clicked", %{"category" => category, "series" => series, "value" => value}=params, socket) do
-    IO.inspect params
-
+  def handle_event("chart1_bar_clicked", %{"category" => category, "series" => series, "value" => value}=_params, socket) do
     bar_clicked = "You clicked: #{category} / #{series} with value #{value}"
     selected_bar = %{category: category, series: series}
 

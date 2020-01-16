@@ -121,3 +121,8 @@ input, input[type="number"], input[type="text"] {
 h3 {
   margin-bottom: 1rem;
 }
+
+.column {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}

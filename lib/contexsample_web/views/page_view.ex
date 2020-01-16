@@ -34,10 +34,11 @@ defmodule ContexSampleWeb.PageView do
   def make_a_basic_point_plot() do
     dataset = make_test_point_data(300)
     plot_content = PointPlot.new(dataset)
-    |> PointPlot.set_y_col_name("Y2")
+    |> PointPlot.set_y_col_names(["Something", "Another"])
 
     plot = Plot.new(500, 300, plot_content)
       |> Plot.titles("Sample Scatter Plot", nil)
+      |> Plot.plot_options(%{legend_setting: :legend_right})
 
     Plot.to_svg(plot)
   end
@@ -68,12 +69,12 @@ defmodule ContexSampleWeb.PageView do
   defp make_test_point_data(points) do
     data = for _ <- 1..points do
       x = random_within_range(0.0, 100.0)
-      y = random_within_range(x * 0.4, x * 0.6)
-      y2 = random_within_range((100.0 - x) * 0.4, (100.0 - x) * 0.6)
+      y = random_within_range(x * 0.7, x * 0.8)
+      y2 = random_within_range(x * 0.4, x * 0.6)
       {x, y, y2}
     end
 
-    Dataset.new(data, ["X", "Y", "Y2"])
+    Dataset.new(data, ["X", "Something", "Another"])
   end
 
 

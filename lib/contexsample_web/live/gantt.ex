@@ -40,7 +40,7 @@ defmodule ContexSampleWeb.GanttLive do
       |> GanttChart.defaults()
 
     plot = Plot.new(600, 400, plot_content)
-      |> Plot.titles("Test Gantt", nil)
+      |> Plot.titles("Sample Gantt Chart", nil)
 
     Plot.to_svg(plot)
   end

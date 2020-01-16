@@ -15,6 +15,7 @@
             <li><a href="/">Home</a></li>
             <li><%= link "Simple Bar Plot", to: Routes.live_path(@conn, ContexSampleWeb.BarPlotLive) %></li>
             <li><%= link "Bar Plot On Timer", to: Routes.live_path(@conn, ContexSampleWeb.BarPlotTimer) %></li>
+            <li><%= link "Point Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %></li>
             <li><%= link "Sparkline", to: Routes.live_path(@conn, ContexSampleWeb.SparklineLive) %></li>
             <li><%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %></li>
           </ul>

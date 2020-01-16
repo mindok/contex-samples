@@ -2,6 +2,8 @@ defmodule ContexSampleWeb.BarPlotTimer do
   use Phoenix.LiveView
   use Phoenix.HTML
 
+  import ContexSampleWeb.Shared
+
   alias Contex.{BarPlot, Plot, Dataset}
 
   def render(assigns) do
@@ -65,7 +67,7 @@ defmodule ContexSampleWeb.BarPlotTimer do
   def handle_event("chart_options_changed", %{}=params, socket) do
     socket =
       socket
-      |> ContexSampleWeb.BarPlotLive.update_chart_options_from_params(params)
+      |> update_chart_options_from_params(params)
       |> make_test_data()
 
     {:noreply, socket}
@@ -92,13 +94,6 @@ defmodule ContexSampleWeb.BarPlotTimer do
     Plot.to_svg(plot)
   end
 
-  defp lookup_colours("pastel"), do: :pastel1
-  defp lookup_colours("themed"), do: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
-  defp lookup_colours("default"), do: :default
-  defp lookup_colours("warm"), do: :warm
-  defp lookup_colours("nil"), do: nil
-  defp lookup_colours(_), do: nil
-
   defp make_test_data(socket) do
     options = socket.assigns.chart_options
     series = options.series
@@ -123,26 +118,4 @@ defmodule ContexSampleWeb.BarPlotTimer do
 
     assign(socket, test_data: test_data, chart_options: options)
   end
-
-  defp chart_type_options(), do: simple_option_list(~w(stacked grouped))
-  defp chart_orientation_options(), do: simple_option_list(~w(vertical horizontal))
-  defp yes_no_options(), do: simple_option_list(~w(yes no))
-  defp colour_options(), do: simple_option_list(~w(default themed warm pastel nil))
-
-
-  defp simple_option_list(options), do: Enum.map(options, &%{name: &1, value: &1})
-
-  defp raw_select(name, id, options, current_item) do
-    beginning_bit = ~E|<select  type="select" name="<%= name %>" id="<%= id %>">|
-
-    middle_bit = Enum.map(options, fn o ->
-      selected = if o.value == current_item, do: "selected", else: ""
-      ~E|<option value="<%= o.value %>" <%= selected %>><%= o.name %></option>|
-    end)
-
-    end_bit = ~E|</select>|
-    [beginning_bit, middle_bit, end_bit]
-  end
-
-
 end

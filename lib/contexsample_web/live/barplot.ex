@@ -2,6 +2,8 @@ defmodule ContexSampleWeb.BarPlotLive do
   use Phoenix.LiveView
   use Phoenix.HTML
 
+  import ContexSampleWeb.Shared
+
   alias Contex.{BarPlot, Plot, Dataset}
 
   def render(assigns) do
@@ -82,45 +84,6 @@ defmodule ContexSampleWeb.BarPlotLive do
     {:noreply, socket}
   end
 
-  def update_chart_options_from_params(socket, params) do
-    options =
-      socket.assigns.chart_options
-      |> update_if_int(:series, params["series"])
-      |> update_if_int(:categories, params["categories"])
-      |> update_type(params["type"])
-      |> update_orientation(params["orientation"])
-      |> Map.put(:show_legend, params["show_legend"])
-      |> Map.put(:show_selected, params["show_selected"])
-      |> Map.put(:title, params["title"])
-      |> Map.put(:colour_scheme, params["colour_scheme"])
-
-     assign(socket, chart_options: options)
-  end
-
-  defp update_if_int(map, key, possible_value) do
-    case Integer.parse(possible_value) do
-      {val, ""} -> Map.put(map, key, val)
-      _ -> map
-    end
-  end
-
-  defp update_type(options, raw) do
-    case raw do
-      "stacked" -> Map.put(options, :type, :stacked)
-      "grouped" -> Map.put(options, :type, :grouped)
-      _-> options
-    end
-  end
-
-  defp update_orientation(options, raw) do
-    case raw do
-      "horizontal" -> Map.put(options, :orientation, :horizontal)
-      "vertical" -> Map.put(options, :orientation, :vertical)
-      _-> options
-    end
-  end
-
-
   def basic_plot(test_data, chart_options, selected_bar) do
     plot_content = BarPlot.new(test_data)
       |> BarPlot.set_val_col_names(chart_options.series_columns)
@@ -146,14 +109,6 @@ defmodule ContexSampleWeb.BarPlotLive do
 
     Plot.to_svg(plot)
   end
-
-  defp lookup_colours("pastel"), do: :pastel1
-  defp lookup_colours("default"), do: :default
-  defp lookup_colours("warm"), do: :warm
-  defp lookup_colours("themed"), do: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
-  defp lookup_colours("custom"), do: ["004c6d", "1e6181", "347696", "498caa", "5da3bf", "72bbd4", "88d3ea", "9eebff"]
-  defp lookup_colours("nil"), do: nil
-  defp lookup_colours(_), do: nil
 
   defp make_test_data(socket) do
     options = socket.assigns.chart_options
@@ -183,26 +138,5 @@ defmodule ContexSampleWeb.BarPlotLive do
     diff = max - min
     (:rand.uniform() * diff) + min
   end
-
-  defp chart_type_options(), do: simple_option_list(~w(stacked grouped))
-  defp chart_orientation_options(), do: simple_option_list(~w(vertical horizontal))
-  defp yes_no_options(), do: simple_option_list(~w(yes no))
-  defp colour_options(), do: simple_option_list(~w(default themed custom warm pastel nil))
-
-
-  defp simple_option_list(options), do: Enum.map(options, &%{name: &1, value: &1})
-
-  defp raw_select(name, id, options, current_item) do
-    beginning_bit = ~E|<select  type="select" name="<%= name %>" id="<%= id %>">|
-
-    middle_bit = Enum.map(options, fn o ->
-      selected = if o.value == current_item, do: "selected", else: ""
-      ~E|<option value="<%= o.value %>" <%= selected %>><%= o.name %></option>|
-    end)
-
-    end_bit = ~E|</select>|
-    [beginning_bit, middle_bit, end_bit]
-  end
-
 
 end

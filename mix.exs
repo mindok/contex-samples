@@ -41,8 +41,9 @@ defmodule Contexsample.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:timex, "~> 3.6"},
-      {:contex, git: "https://github.com/mindok/contex"}
+      #{:contex, path: "../contex"},
+      {:contex, git: "https://github.com/mindok/contex"},
+      {:timex, "~> 3.6"}
     ]
   end
 

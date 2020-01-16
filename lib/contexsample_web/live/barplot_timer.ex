@@ -52,7 +52,7 @@ defmodule ContexSampleWeb.BarPlotTimer do
   def mount(_params, socket) do
     socket =
       socket
-      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "default"})
+      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed"})
       |> assign(counter: 0)
       |> make_test_data()
 
@@ -93,6 +93,7 @@ defmodule ContexSampleWeb.BarPlotTimer do
   end
 
   defp lookup_colours("pastel"), do: :pastel1
+  defp lookup_colours("themed"), do: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
   defp lookup_colours("default"), do: :default
   defp lookup_colours("warm"), do: :warm
   defp lookup_colours("nil"), do: nil
@@ -126,7 +127,7 @@ defmodule ContexSampleWeb.BarPlotTimer do
   defp chart_type_options(), do: simple_option_list(~w(stacked grouped))
   defp chart_orientation_options(), do: simple_option_list(~w(vertical horizontal))
   defp yes_no_options(), do: simple_option_list(~w(yes no))
-  defp colour_options(), do: simple_option_list(~w(default warm pastel nil))
+  defp colour_options(), do: simple_option_list(~w(default themed warm pastel nil))
 
 
   defp simple_option_list(options), do: Enum.map(options, &%{name: &1, value: &1})

@@ -87,12 +87,37 @@
   border-bottom: 1px solid #e3e3e3;
   background: #ff9838;
   border-radius: 6px;
-  padding: 3em;
-  margin-bottom: 3rem;
+  padding: 1.5em;
+  margin-bottom: 1.5rem;
   font-weight: 200;
   font-size: 120%;
   color: white;
 }
 .ctx-hero p {
   margin: 0;
+}
+
+body {
+  color: darkslategrey;
+}
+
+label {
+  margin-bottom: 0.2rem;
+  font-size: 1.2rem;
+}
+
+input, select, input[type="number"], input[type="text"] {
+  margin-bottom: 0.6rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  height: 2.8rem;
+}
+
+input, input[type="number"], input[type="text"] {
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
 }

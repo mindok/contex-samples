@@ -31,9 +31,11 @@ defmodule ContexSampleWeb.BarPlotLive do
               <label for="colour_scheme">Colour Scheme</label>
               <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
 
+              <label for="show_legend">Show Legend</label>
+              <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
+
               <label for="show_selected">Show Clicked Bar</label>
               <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart_options.show_selected) %>
-
             </form>
 
           </div>
@@ -54,7 +56,7 @@ defmodule ContexSampleWeb.BarPlotLive do
   def mount(_params, socket) do
     socket =
       socket
-      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "default"})
+      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed", show_legend: "no"})
       |> assign(bar_clicked: "Click a bar. Any bar", selected_bar: nil)
       |> make_test_data()
 
@@ -87,6 +89,7 @@ defmodule ContexSampleWeb.BarPlotLive do
       |> update_if_int(:categories, params["categories"])
       |> update_type(params["type"])
       |> update_orientation(params["orientation"])
+      |> Map.put(:show_legend, params["show_legend"])
       |> Map.put(:show_selected, params["show_selected"])
       |> Map.put(:title, params["title"])
       |> Map.put(:colour_scheme, params["colour_scheme"])
@@ -126,13 +129,20 @@ defmodule ContexSampleWeb.BarPlotLive do
       |> BarPlot.event_handler("chart1_bar_clicked")
       |> BarPlot.colours(lookup_colours(chart_options.colour_scheme))
 
+
     plot_content = case chart_options.show_selected do
       "yes" -> BarPlot.select_item(plot_content, selected_bar)
       _ -> plot_content
     end
 
+    options = case chart_options.show_legend do
+      "yes" -> %{legend_setting: :legend_right}
+      _ -> %{}
+    end
+
     plot = Plot.new(500, 400, plot_content)
       |> Plot.titles(chart_options.title, nil)
+      |> Plot.plot_options(options)
 
     Plot.to_svg(plot)
   end
@@ -140,6 +150,7 @@ defmodule ContexSampleWeb.BarPlotLive do
   defp lookup_colours("pastel"), do: :pastel1
   defp lookup_colours("default"), do: :default
   defp lookup_colours("warm"), do: :warm
+  defp lookup_colours("themed"), do: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
   defp lookup_colours("custom"), do: ["004c6d", "1e6181", "347696", "498caa", "5da3bf", "72bbd4", "88d3ea", "9eebff"]
   defp lookup_colours("nil"), do: nil
   defp lookup_colours(_), do: nil
@@ -176,7 +187,7 @@ defmodule ContexSampleWeb.BarPlotLive do
   defp chart_type_options(), do: simple_option_list(~w(stacked grouped))
   defp chart_orientation_options(), do: simple_option_list(~w(vertical horizontal))
   defp yes_no_options(), do: simple_option_list(~w(yes no))
-  defp colour_options(), do: simple_option_list(~w(default custom warm pastel nil))
+  defp colour_options(), do: simple_option_list(~w(default themed custom warm pastel nil))
 
 
   defp simple_option_list(options), do: Enum.map(options, &%{name: &1, value: &1})

@@ -80,7 +80,7 @@ defmodule ContexSampleWeb.SparklineLive do
 
   defp make_red_plot(data) do
     Sparkline.new(data)
-    |> Sparkline.colours("rgba(200, 20, 20, 0.2)", "rgba(200, 20, 20, 0.7)")
+    |> Sparkline.colours("#fad48e", "#ff9838")
     |> Sparkline.draw()
   end
 

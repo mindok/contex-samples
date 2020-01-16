@@ -1,11 +1,36 @@
 <section class="ctx-hero">
-  <h1>ContEx</h1>
+   <h1><img src="images/logo.png" height="30px"/> ContEx</h1>
+
   <p>A flexible charting library for Elixir server side charting.</p>
 </section>
 
 <section class="row">
+  <h3>Sample charts written in a standard (non-live) view: (plus a sparkline &rarr;<%= sparkline([0, 5, 10, 15, 12, 12, 15, 14, 20, 14, 10, 15, 15]) %>)</h3>
+</section>
+<section class="row">
+  <p>Refresh the page - the charts below will change...</p>
+</section>
+<section class="row">
   <article class="column">
-    <h2>Demos</h2>
+      <%= make_a_basic_bar_chart() %>
+  </article>
+  <article class="column">
+      <%= make_a_basic_point_plot() %>
+  </article>
+</section>
+<section class="row">
+  <article class="column">
+      <%= make_a_basic_bar_chart2() %>
+  </article>
+  <article class="column">
+      <%= ContexSampleWeb.GanttLive.build_ganttchart() %>
+  </article>
+</section>
+
+<section class="row">
+  <article class="column">
+    <h2>LiveView Demos</h2>
+    These below demos are all written as Phoenix LiveViews.
     <ul>
       <li>
         <%= link "Simple Bar Plot", to: Routes.live_path(@conn, ContexSampleWeb.BarPlotLive) %>
@@ -23,6 +48,8 @@
         <%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %>
         <p>A super simple <code>Contex.GanttChart</code> demo<p>
       </li>
+
+
     </ul>
   </article>
   <article class="column">
@@ -40,3 +67,4 @@
     </ul>
   </article>
 </section>
+

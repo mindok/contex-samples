@@ -61,7 +61,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #606c76;
+    background-color: #ff9838;
 }
 
 .navbar li {
@@ -78,5 +78,21 @@
 }
 
 .navbar li a:hover {
-    background-color: #76828b;
+    background-color: #cc7828;
+}
+
+
+.ctx-hero {
+  text-align: center;
+  border-bottom: 1px solid #e3e3e3;
+  background: #ff9838;
+  border-radius: 6px;
+  padding: 3em;
+  margin-bottom: 3rem;
+  font-weight: 200;
+  font-size: 120%;
+  color: white;
+}
+.ctx-hero p {
+  margin: 0;
 }

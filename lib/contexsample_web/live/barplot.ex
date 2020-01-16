@@ -12,34 +12,34 @@ defmodule ContexSampleWeb.BarPlotLive do
         <div class="row">
           <div class="column column-25">
 
-            <form phx-change="chart1_options_changed">
+            <form phx-change="chart_options_changed">
               <label for="title">Plot Title</label>
-              <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart1_options.title %>>
+              <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
 
               <label for="series">Number of series</label>
-              <input type="number" name="series" id="series" placeholder="Enter #series" value=<%= @chart1_options.series %>>
+              <input type="number" name="series" id="series" placeholder="Enter #series" value=<%= @chart_options.series %>>
 
               <label for="categories">Number of categories</label>
-              <input type="number" name="categories" id="categories" placeholder="Enter #categories" value=<%= @chart1_options.categories %>>
+              <input type="number" name="categories" id="categories" placeholder="Enter #categories" value=<%= @chart_options.categories %>>
 
               <label for="type">Type</label>
-              <%= raw_select("type", "type", chart_type_options(), Atom.to_string(@chart1_options.type)) %>
+              <%= raw_select("type", "type", chart_type_options(), Atom.to_string(@chart_options.type)) %>
 
               <label for="orientation">Orientation</label>
-              <%= raw_select("orientation", "orientation", chart_orientation_options(), Atom.to_string(@chart1_options.orientation)) %>
+              <%= raw_select("orientation", "orientation", chart_orientation_options(), Atom.to_string(@chart_options.orientation)) %>
 
               <label for="colour_scheme">Colour Scheme</label>
-              <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart1_options.colour_scheme) %>
+              <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
 
               <label for="show_selected">Show Clicked Bar</label>
-              <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart1_options.show_selected) %>
+              <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart_options.show_selected) %>
 
-              </form>
+            </form>
 
           </div>
 
           <div class="column column-75">
-            <%= basic_plot(@test_data, @chart1_options, @selected_bar) %>
+            <%= basic_plot(@test_data, @chart_options, @selected_bar) %>
 
             <%= @bar_clicked %>
           </div>
@@ -54,7 +54,7 @@ defmodule ContexSampleWeb.BarPlotLive do
   def mount(_params, socket) do
     socket =
       socket
-      |> assign(chart1_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "default"})
+      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "default"})
       |> assign(bar_clicked: "Click a bar. Any bar", selected_bar: nil)
       |> make_test_data()
 
@@ -62,20 +62,10 @@ defmodule ContexSampleWeb.BarPlotLive do
 
   end
 
-  def handle_event("chart1_options_changed", %{"show_selected"=> show_selected, "title"=>title, "colour_scheme" => colour_scheme}=params, socket) do
-    options =
-      socket.assigns.chart1_options
-      |> update_if_int(:series, params["series"])
-      |> update_if_int(:categories, params["categories"])
-      |> update_type(params["type"])
-      |> update_orientation(params["orientation"])
-      |> Map.put(:show_selected, show_selected)
-      |> Map.put(:title, title)
-      |> Map.put(:colour_scheme, colour_scheme)
-
+  def handle_event("chart_options_changed", %{}=params, socket) do
     socket =
       socket
-      |> assign(chart1_options: options)
+      |> update_chart_options_from_params(params)
       |> make_test_data()
 
     {:noreply, socket}
@@ -88,6 +78,20 @@ defmodule ContexSampleWeb.BarPlotLive do
     socket = assign(socket, bar_clicked: bar_clicked, selected_bar: selected_bar)
 
     {:noreply, socket}
+  end
+
+  def update_chart_options_from_params(socket, params) do
+    options =
+      socket.assigns.chart_options
+      |> update_if_int(:series, params["series"])
+      |> update_if_int(:categories, params["categories"])
+      |> update_type(params["type"])
+      |> update_orientation(params["orientation"])
+      |> Map.put(:show_selected, params["show_selected"])
+      |> Map.put(:title, params["title"])
+      |> Map.put(:colour_scheme, params["colour_scheme"])
+
+     assign(socket, chart_options: options)
   end
 
   defp update_if_int(map, key, possible_value) do
@@ -114,21 +118,21 @@ defmodule ContexSampleWeb.BarPlotLive do
   end
 
 
-  def basic_plot(test_data, chart1_options, selected_bar) do
+  def basic_plot(test_data, chart_options, selected_bar) do
     plot_content = BarPlot.new(test_data)
-      |> BarPlot.set_val_col_names(chart1_options.series_columns)
-      |> BarPlot.type(chart1_options.type)
-      |> BarPlot.orientation(chart1_options.orientation)
+      |> BarPlot.set_val_col_names(chart_options.series_columns)
+      |> BarPlot.type(chart_options.type)
+      |> BarPlot.orientation(chart_options.orientation)
       |> BarPlot.event_handler("chart1_bar_clicked")
-      |> BarPlot.colours(lookup_colours(chart1_options.colour_scheme))
+      |> BarPlot.colours(lookup_colours(chart_options.colour_scheme))
 
-    plot_content = case chart1_options.show_selected do
+    plot_content = case chart_options.show_selected do
       "yes" -> BarPlot.select_item(plot_content, selected_bar)
       _ -> plot_content
     end
 
     plot = Plot.new(500, 400, plot_content)
-      |> Plot.titles(chart1_options.title, nil)
+      |> Plot.titles(chart_options.title, nil)
 
     Plot.to_svg(plot)
   end
@@ -141,7 +145,7 @@ defmodule ContexSampleWeb.BarPlotLive do
   defp lookup_colours(_), do: nil
 
   defp make_test_data(socket) do
-    options = socket.assigns.chart1_options
+    options = socket.assigns.chart_options
     series = options.series
     categories = options.categories
 
@@ -161,7 +165,7 @@ defmodule ContexSampleWeb.BarPlotLive do
 
     options = Map.put(options, :series_columns, series_cols)
 
-    assign(socket, test_data: test_data, chart1_options: options)
+    assign(socket, test_data: test_data, chart_options: options)
   end
 
   defp random_within_range(min, max) do

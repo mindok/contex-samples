@@ -21,6 +21,8 @@ defmodule ContexSampleWeb.Router do
 
     live "/barplots", BarPlotLive
     live "/barplot_timer", BarPlotTimer
+    live "/sparklines", SparklineLive
+    live "/gantt", GanttLive
   end
 
   # Other scopes may use custom stacks.

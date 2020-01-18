@@ -10,10 +10,13 @@ use Mix.Config
 config :contexsample,
   ecto_repos: [Contexsample.Repo]
 
+secret_key_base =
+  System.get_env("SECRET_KEY_BASE") || "NmtK9GGA7C88oSZdW8oW73MGNgzufNXSlTYig7krCriszdZBdJezs39ZjFbZ5QFW"
+
 # Configures the endpoint
 config :contexsample, ContexSampleWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "NmtK9GGA7C88oSZdW8oW73MGNgzufNXSlTYig7krCriszdZBdJezs39ZjFbZ5QFW",
+  secret_key_base: secret_key_base,
   render_errors: [view: ContexSampleWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Contexsample.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [signing_salt: "am2/tatn8cjd6Q+A/yZqyA0naK/NVIRb"]

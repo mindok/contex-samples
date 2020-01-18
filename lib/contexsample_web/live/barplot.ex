@@ -45,7 +45,8 @@ defmodule ContexSampleWeb.BarPlotLive do
           <div class="column column-75">
             <%= basic_plot(@test_data, @chart_options, @selected_bar) %>
 
-            <%= @bar_clicked %>
+            <p><em><%= @bar_clicked %></em></p>
+            <%= list_to_comma_string(@chart_options[:friendly_message]) %>
           </div>
 
         </div>

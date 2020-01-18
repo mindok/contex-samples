@@ -35,6 +35,7 @@ defmodule ContexSampleWeb.PointPlotLive do
 
           <div class="column">
             <%= build_pointplot(@test_data, @chart_options) %>
+            <%= list_to_comma_string(@chart_options[:friendly_message]) %>
           </div>
         </div>
       </div>

@@ -5,9 +5,10 @@ defmodule ContexSampleWeb.Shared do
   def update_chart_options_from_params(socket, params) do
     options =
       socket.assigns.chart_options
-      |> update_if_int(:series, params["series"])
-      |> update_if_int(:points, params["points"])
-      |> update_if_int(:categories, params["categories"])
+      |> clear_message()
+      |> update_if_int(:series, params["series"], 20)
+      |> update_if_int(:points, params["points"], 5000)
+      |> update_if_int(:categories, params["categories"], 40)
       |> update_type(params["type"])
       |> update_orientation(params["orientation"])
       |> Map.put(:show_legend, params["show_legend"])
@@ -47,11 +48,29 @@ defmodule ContexSampleWeb.Shared do
     [beginning_bit, middle_bit, end_bit]
   end
 
-  defp update_if_int(map, _key, nil), do: map
-  defp update_if_int(map, key, possible_value) do
+  def list_to_comma_string(nil), do: ""
+  def list_to_comma_string(list), do: Enum.join(list, ", ")
+
+  defp clear_message(map), do: Map.put(map, :friendly_message, [])
+
+  defp add_message(map, msg) do
+    existing = case map[:friendly_message] do
+      [] -> ["Are you trying to crash the demo server?!. Feel free to clone the repo if you want to test the limits. The BEAM generally keeps up - browser rendering is usually where things drag."]
+      [_|_] = val -> val
+    end
+    Map.put(map, :friendly_message, [msg | existing])
+  end
+
+  defp update_if_int(map, _key, nil, _max), do: map
+  defp update_if_int(map, key, possible_value, max) do
     case Integer.parse(possible_value) do
       {val, ""} ->
-        if val > 0, do: Map.put(map, key, val), else: map
+        if val > max do
+          Map.put(map, key, max)
+          |> add_message("Maximum for #{key} is #{max}")
+        else
+          if val > 0, do: Map.put(map, key, val), else: map
+        end
       _ ->
         map
     end

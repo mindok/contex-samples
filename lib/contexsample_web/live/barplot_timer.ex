@@ -42,6 +42,7 @@ defmodule ContexSampleWeb.BarPlotTimer do
 
           <div class="column column-75">
             <%= basic_plot(@test_data, @chart_options) %>
+            <%= list_to_comma_string(@chart_options[:friendly_message]) %>
           </div>
 
         </div>

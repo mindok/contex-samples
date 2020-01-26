@@ -18,6 +18,7 @@ defmodule ContexSampleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/faq", PageController, :faq
 
     live "/barplots", BarPlotLive
     live "/barplot_timer", BarPlotTimer

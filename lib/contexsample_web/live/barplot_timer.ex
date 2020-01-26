@@ -41,8 +41,10 @@ defmodule ContexSampleWeb.BarPlotTimer do
           </div>
 
           <div class="column column-75">
-            <%= basic_plot(@test_data, @chart_options) %>
-            <%= list_to_comma_string(@chart_options[:friendly_message]) %>
+            <%= if @show_chart do %>
+              <%= basic_plot(@test_data, @chart_options) %>
+              <%= list_to_comma_string(@chart_options[:friendly_message]) %>
+            <% end %>
           </div>
 
         </div>
@@ -59,7 +61,13 @@ defmodule ContexSampleWeb.BarPlotTimer do
       |> assign(counter: 0)
       |> make_test_data()
 
-    if connected?(socket), do: Process.send_after(self(), :tick, 100)
+    socket = case connected?(socket) do
+      true ->
+        Process.send_after(self(), :tick, 100)
+        assign(socket, show_chart: true)
+      false ->
+        assign(socket, show_chart: true)
+    end
 
     {:ok, socket}
 

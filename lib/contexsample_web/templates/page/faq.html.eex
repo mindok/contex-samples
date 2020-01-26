@@ -1,0 +1,60 @@
+<section class="ctx-hero">
+   <h1>About ContEx Charts <img src="images/logo.png" height="30px"/></h1>
+</section>
+
+<section class="row">
+  <article class="column">
+  <h3>What is ContEx?</h3>
+  <p>A pure Elixir server-side data plotting library outputting SVG.</p>
+
+  <h3>Why did you write it?</h3>
+  <p>For a couple of reasons:</p>
+  <ul>
+    <li>I had a lot of dashboard & data visualisation work coming up and although I could generate nice charts using Javascript libraries, it's fiddly and involves quite a lot of boilerplate.</li>
+    <li>I have benefitted immensely from the open source community and decided that this could be a reasonable gift back to the community as a way of saying thanks. I know from reading the forums etc that there is a need for something like this</li>
+  </ul>
+
+  <h3>What are the main limitations?</h3>
+  <ul>
+    <li>It's early days, so the API is going to change and that might break any code that relies on it. Plus documentation is somewhere between extremely poor and non-existent.</li>
+    <li>Interacting with the graphics (for example, <a href="http://bl.ocks.org/feyderm/6bdbc74236c27a843db633981ad22c1b" target="_blank">brushing</a>) isn't possible without a lot of JS. If you need highly interactive graphics, use a JS charting library</li>
+    <li>Some browsers (notably iOS-based) don't pick up clicks from SVG elements, so if you rely on this and have no control over the end user's browser, you may want to use something else</li>
+    <li>There's no state management in the chart generation at this point, so no smarts to send incremental diffs to the browser as a dataset changes. This may be reconsidered when Phoenix LiveView has better handling of changes to lists, although it is quite complex when it comes to managing and adjusting axes as data change.</li>
+  </ul>
+
+  <h3>What's on the roadmap?</h3>
+  <p>In no particular order, but likely dependent on the immediate needs of a startup I'm co-founding:</p>
+  <ul>
+    <li>Line plots</li>
+    <li>Plot overlays</li>
+    <li>Dataset -> Stats transformation (e.g. for generating histograms, Q-Q plots, CuSum plots)</li>
+    <li>Colour interpolation system in order to create...</li>
+    <li>Continuous colour scales</li>
+    <li>Size / area scales</li>
+    <li>Nicer option handling</li>
+  </ul>
+
+  <p>In addition, there are some significant house-keeping items to attend to:</p>
+  <ul>
+    <li>Docs</li>
+    <li>Improve SVG generation code. It works, it's reasonably ok to follow, but it's getting a bit unwieldy</li>
+    <li>Better test coverage (i.e. some). Because it highly graphical and mostly developed interactively with a suite of LiveView's to check output it probably isn't as important as for other library types, but it would be good to get solid coverage of Axis/Scale logic, Dataset aggregation/stats</li>
+  </ul>
+
+  <h3>Do you accept PRs?</h3>
+  <p>Yes, but it's probably better to raise an issue first and discuss what you have in mind (or identify the bug that you're fixing or code you're improving).</p>
+  <p>I don't have any plans for this project to be a one man band, and over time, if there's interest, I'd be very happy to have multiple maintainers looking after the codebase.</p>
+
+  <h3>What other options do I have as an Elixir Developer?</h3>
+  <p><strong><a href="https://github.com/elcritch/plotex">PlotEx</a></strong>: Another pure Elixir option. More optimized for line charts with large datasets, and time series</p>
+  <p><strong>DIY Server Side</strong>: There are a <a href="https://github.com/sasa1977/demo_system/">few examples around</a> showing generating SVG server side</p>
+  <p><strong>Elixir wraps for JS libraries</strong>: For example, <a href="https://github.com/buren/chartkick-ex">chartkick-ex - a chartkick.js wrapper</a></p>
+  <p><strong>LiveView interop with a JS charting library</strong>: For example <a href="https://elixirforum.com/t/realtime-js-chart-in-liveview-with-hooks-what-do-you-think/27061">Highcharts with LiveView hooks</a>
+
+
+  <h3>Who is MindOk?</h3>
+  <p>Many years ago I was told by a very wise man "Mind Ok, Everything Ok". It is so true. I have encountered poor, sick people who are happy, and rich, healthy, miserable folk. Wealth, fame etc count for nothing if you're miserable. Mind and the way it views the world are the most important thing. "MindOk" is there to remind me every day.</p>
+
+
+  </article>
+</section>

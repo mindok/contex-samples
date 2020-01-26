@@ -20,8 +20,8 @@ defmodule ContexSampleWeb.Router do
     get "/", PageController, :index
     get "/faq", PageController, :faq
 
-    live "/barplots", BarPlotLive
-    live "/barplot_timer", BarPlotTimer
+    live "/barcharts", BarChartLive
+    live "/barchart_timer", BarChartTimer
     live "/sparklines", SparklineLive
     live "/gantt", GanttLive
     live "/point", PointPlotLive

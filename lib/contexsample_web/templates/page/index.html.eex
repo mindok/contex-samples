@@ -33,12 +33,12 @@
     These below demos are all written as Phoenix LiveViews.
     <ul>
       <li>
-        <%= link "Simple Bar Plot", to: Routes.live_path(@conn, ContexSampleWeb.BarPlotLive) %>
-        <p>Demonstrates the various options for <code>Contex.BarPlot</code><p>
+        <%= link "Simple Bar Chart", to: Routes.live_path(@conn, ContexSampleWeb.BarChartLive) %>
+        <p>Demonstrates the various options for <code>Contex.BarChart</code><p>
       </li>
       <li>
-        <%= link "Bar Plot On Timer", to: Routes.live_path(@conn, ContexSampleWeb.BarPlotTimer) %>
-        <p>Shows <code>Contex.BarPlot</code> getting updated server-side every 100ms<p>
+        <%= link "Bar Chart On Timer", to: Routes.live_path(@conn, ContexSampleWeb.BarChartTimer) %>
+        <p>Shows <code>Contex.BarChart</code> getting updated server-side every 100ms<p>
       </li>
       <li>
         <%= link "Point Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %>

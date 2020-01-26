@@ -1,20 +1,19 @@
-defmodule ContexSampleWeb.BarPlotLive do
+defmodule ContexSampleWeb.BarChartTimer do
   use Phoenix.LiveView
   use Phoenix.HTML
 
   import ContexSampleWeb.Shared
 
-  alias Contex.{BarPlot, Plot, Dataset}
+  alias Contex.{BarChart, Plot, Dataset}
 
   def render(assigns) do
     ~L"""
-      <h3>Simple Bar Plot Example</h3>
-      <p>Source code can be found <a href="https://github.com/mindok/contex-samples/blob/master/lib/contexsample_web/live/barplot.ex">on Github</a></p>
+      <h3>Bar Chart On A Timer Example</h3>
       <div class="container">
         <div class="row">
           <div class="column column-25">
 
-            <form phx-change="chart_options_changed">
+             <form phx-change="chart_options_changed">
               <label for="title">Plot Title</label>
               <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
 
@@ -33,20 +32,19 @@ defmodule ContexSampleWeb.BarPlotLive do
               <label for="colour_scheme">Colour Scheme</label>
               <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
 
-              <label for="show_legend">Show Legend</label>
-              <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
-
               <label for="show_selected">Show Clicked Bar</label>
               <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart_options.show_selected) %>
+
             </form>
+
 
           </div>
 
           <div class="column column-75">
-            <%= basic_plot(@test_data, @chart_options, @selected_bar) %>
-
-            <p><em><%= @bar_clicked %></em></p>
-            <%= list_to_comma_string(@chart_options[:friendly_message]) %>
+            <%= if @show_chart do %>
+              <%= basic_plot(@test_data, @chart_options) %>
+              <%= list_to_comma_string(@chart_options[:friendly_message]) %>
+            <% end %>
           </div>
 
         </div>
@@ -59,9 +57,17 @@ defmodule ContexSampleWeb.BarPlotLive do
   def mount(_params, socket) do
     socket =
       socket
-      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed", show_legend: "no"})
-      |> assign(bar_clicked: "Click a bar. Any bar", selected_bar: nil)
+      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed"})
+      |> assign(counter: 0)
       |> make_test_data()
+
+    socket = case connected?(socket) do
+      true ->
+        Process.send_after(self(), :tick, 100)
+        assign(socket, show_chart: true)
+      false ->
+        assign(socket, show_chart: true)
+    end
 
     {:ok, socket}
 
@@ -76,37 +82,23 @@ defmodule ContexSampleWeb.BarPlotLive do
     {:noreply, socket}
   end
 
-  def handle_event("chart1_bar_clicked", %{"category" => category, "series" => series, "value" => value}=_params, socket) do
-    bar_clicked = "You clicked: #{category} / #{series} with value #{value}"
-    selected_bar = %{category: category, series: series}
+  def handle_info(:tick, socket) do
+    counter = socket.assigns.counter
 
-    socket = assign(socket, bar_clicked: bar_clicked, selected_bar: selected_bar)
-
-    {:noreply, socket}
+    Process.send_after(self(), :tick, 100)
+    {:noreply, assign(socket, counter: counter + 1) |> make_test_data()}
   end
 
-  def basic_plot(test_data, chart_options, selected_bar) do
-    plot_content = BarPlot.new(test_data)
-      |> BarPlot.set_val_col_names(chart_options.series_columns)
-      |> BarPlot.type(chart_options.type)
-      |> BarPlot.orientation(chart_options.orientation)
-      |> BarPlot.event_handler("chart1_bar_clicked")
-      |> BarPlot.colours(lookup_colours(chart_options.colour_scheme))
-
-
-    plot_content = case chart_options.show_selected do
-      "yes" -> BarPlot.select_item(plot_content, selected_bar)
-      _ -> plot_content
-    end
-
-    options = case chart_options.show_legend do
-      "yes" -> %{legend_setting: :legend_right}
-      _ -> %{}
-    end
+  def basic_plot(test_data, chart_options) do
+    plot_content = BarChart.new(test_data)
+      |> BarChart.set_val_col_names(chart_options.series_columns)
+      |> BarChart.type(chart_options.type)
+      |> BarChart.orientation(chart_options.orientation)
+      |> BarChart.colours(lookup_colours(chart_options.colour_scheme))
+      |> BarChart.force_value_range({0, chart_options.series * 2.0})
 
     plot = Plot.new(500, 400, plot_content)
       |> Plot.titles(chart_options.title, nil)
-      |> Plot.plot_options(options)
 
     Plot.to_svg(plot)
   end
@@ -115,11 +107,12 @@ defmodule ContexSampleWeb.BarPlotLive do
     options = socket.assigns.chart_options
     series = options.series
     categories = options.categories
+    counter = socket.assigns.counter
 
     data = 1..categories
     |> Enum.map(fn cat ->
-      series_data = for _ <- 1..series do
-        random_within_range(10.0, 100.0)
+      series_data = for s <- 1..series do
+        abs(1 + :math.sin((counter + cat + s) / 5.0))
       end
       ["Category #{cat}" | series_data]
     end)
@@ -134,10 +127,4 @@ defmodule ContexSampleWeb.BarPlotLive do
 
     assign(socket, test_data: test_data, chart_options: options)
   end
-
-  defp random_within_range(min, max) do
-    diff = max - min
-    (:rand.uniform() * diff) + min
-  end
-
 end

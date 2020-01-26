@@ -15,7 +15,7 @@ defmodule ContexSampleWeb.Endpoint do
     at: "/",
     from: :contexsample,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js favicon.ico robots.txt apple-touch-icon.png)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

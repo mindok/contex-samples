@@ -1,13 +1,13 @@
 defmodule ContexSampleWeb.PageView do
   use ContexSampleWeb, :view
 
-  alias Contex.{Dataset, BarPlot, Plot, PointPlot, Sparkline}
+  alias Contex.{Dataset, BarChart, Plot, PointPlot, Sparkline}
 
   def make_a_basic_bar_chart() do
     %{dataset: dataset, series_cols: series_cols} = make_test_bar_data(10, 4)
-    plot_content = BarPlot.new(dataset)
-    |> BarPlot.set_val_col_names(series_cols)
-    |> BarPlot.colours(["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"])
+    plot_content = BarChart.new(dataset)
+    |> BarChart.set_val_col_names(series_cols)
+    |> BarChart.colours(["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"])
 
 
     plot = Plot.new(500, 300, plot_content)
@@ -19,10 +19,10 @@ defmodule ContexSampleWeb.PageView do
 
   def make_a_basic_bar_chart2() do
     %{dataset: dataset, series_cols: series_cols} = make_test_bar_data(10, 4)
-    plot_content = BarPlot.new(dataset)
-    |> BarPlot.set_val_col_names(series_cols)
-    |> BarPlot.orientation(:horizontal)
-    |> BarPlot.colours(["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"])
+    plot_content = BarChart.new(dataset)
+    |> BarChart.set_val_col_names(series_cols)
+    |> BarChart.orientation(:horizontal)
+    |> BarChart.colours(["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"])
 
 
     plot = Plot.new(500, 300, plot_content)

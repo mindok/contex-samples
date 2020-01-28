@@ -36,7 +36,6 @@
 
   <p>In addition, there are some significant house-keeping items to attend to:</p>
   <ul>
-    <li>Docs</li>
     <li>Improve SVG generation code. It works, it's reasonably ok to follow, but it's getting a bit unwieldy</li>
     <li>Better test coverage (i.e. some). Because it highly graphical and mostly developed interactively with a suite of LiveView's to check output it probably isn't as important as for other library types, but it would be good to get solid coverage of Axis/Scale logic, Dataset aggregation/stats</li>
   </ul>

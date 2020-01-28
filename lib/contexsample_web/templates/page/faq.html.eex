@@ -16,7 +16,7 @@
 
   <h3>What are the main limitations?</h3>
   <ul>
-    <li>It's early days, so the API is going to change and that might break any code that relies on it. Plus documentation is somewhere between extremely poor and non-existent.</li>
+    <li>It's early days, so the API is going to change and that might break any code that relies on it.</li>
     <li>Interacting with the graphics (for example, <a href="http://bl.ocks.org/feyderm/6bdbc74236c27a843db633981ad22c1b" target="_blank">brushing</a>) isn't possible without a lot of JS. If you need highly interactive graphics, use a JS charting library</li>
     <li>Some browsers (notably iOS-based) don't pick up clicks from SVG elements, so if you rely on this and have no control over the end user's browser, you may want to use something else</li>
     <li>There's no state management in the chart generation at this point, so no smarts to send incremental diffs to the browser as a dataset changes. This may be reconsidered when Phoenix LiveView has better handling of changes to lists, although it is quite complex when it comes to managing and adjusting axes as data change.</li>

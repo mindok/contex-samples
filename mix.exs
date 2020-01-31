@@ -43,7 +43,9 @@ defmodule Contexsample.MixProject do
       {:plug_cowboy, "~> 2.0"},
       #{:contex, path: "../contex"},
       {:contex, git: "https://github.com/mindok/contex"},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:makeup, "~> 1.0.0"},
+      {:makeup_elixir, "~> 0.14.0"}
     ]
   end
 

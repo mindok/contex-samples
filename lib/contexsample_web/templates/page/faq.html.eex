@@ -40,8 +40,8 @@
     <li>Better test coverage (i.e. some). Because it highly graphical and mostly developed interactively with a suite of LiveView's to check output it probably isn't as important as for other library types, but it would be good to get solid coverage of Axis/Scale logic, Dataset aggregation/stats</li>
   </ul>
 
-  <h3>Do you accept PRs?</h3>
-  <p>Yes, but it's probably better to raise an issue first and discuss what you have in mind (or identify the bug that you're fixing or code you're improving).</p>
+  <h3>Contributing</h3>
+  <p>Because the codebase is still evolving rapidly, and some areas will be tidied up as the API and functionality evolve, it isn't practical yet to handle unplanned PRs. If you have something in mind, it is better to raise an issue on github first to discuss what you have in mind.</p>
   <p>I don't have any plans for this project to be a one man band, and over time, if there's interest, I'd be very happy to have multiple maintainers looking after the codebase.</p>
 
   <h3>What other options do I have as an Elixir Developer?</h3>

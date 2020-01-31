@@ -8,6 +8,7 @@ defmodule ContexSampleWeb.BarChartLive do
 
   def render(assigns) do
     ~L"""
+      <style><%= get_code_highlighter_styles() %></style>
       <h3>Simple Bar Chart Example</h3>
       <p>Source code can be found <a href="https://github.com/mindok/contex-samples/blob/master/lib/contexsample_web/live/BarChart.ex">on Github</a></p>
       <div class="container">
@@ -36,6 +37,9 @@ defmodule ContexSampleWeb.BarChartLive do
               <label for="show_legend">Show Legend</label>
               <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
 
+              <label for="show_data_labels">Show Data Labels</label>
+              <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
+
               <label for="show_selected">Show Clicked Bar</label>
               <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart_options.show_selected) %>
             </form>
@@ -47,6 +51,9 @@ defmodule ContexSampleWeb.BarChartLive do
 
             <p><em><%= @bar_clicked %></em></p>
             <%= list_to_comma_string(@chart_options[:friendly_message]) %>
+
+            <h4>Code</h4>
+            <%= plot_code(@chart_options, @selected_bar) %>
           </div>
 
         </div>
@@ -59,7 +66,17 @@ defmodule ContexSampleWeb.BarChartLive do
   def mount(_params, socket) do
     socket =
       socket
-      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed", show_legend: "no"})
+      |> assign(chart_options: %{
+            categories: 10,
+            series: 3,
+            type: :stacked,
+            orientation: :vertical,
+            show_data_labels: "yes",
+            show_selected: "no",
+            title: nil,
+            colour_scheme: "themed",
+            show_legend: "no"
+        })
       |> assign(bar_clicked: "Click a bar. Any bar", selected_bar: nil)
       |> make_test_data()
 
@@ -89,6 +106,7 @@ defmodule ContexSampleWeb.BarChartLive do
     plot_content = BarChart.new(test_data)
       |> BarChart.set_val_col_names(chart_options.series_columns)
       |> BarChart.type(chart_options.type)
+      |> BarChart.data_labels(chart_options.show_data_labels == "yes")
       |> BarChart.orientation(chart_options.orientation)
       |> BarChart.event_handler("chart1_bar_clicked")
       |> BarChart.colours(lookup_colours(chart_options.colour_scheme))
@@ -109,6 +127,41 @@ defmodule ContexSampleWeb.BarChartLive do
       |> Plot.plot_options(options)
 
     Plot.to_svg(plot)
+  end
+
+  def plot_code(chart_options, selected_bar) do
+
+    select_item_line = case chart_options.show_selected do
+      "yes" ->
+        if is_nil(selected_bar) do
+          ~s|\|> BarChart.select_item(nil)|
+        else
+          ~s|\|> BarChart.select_item(%{category: "#{selected_bar.category}", series: "#{selected_bar.series}"})|
+        end
+      _ -> ""
+    end
+
+    options = case chart_options.show_legend do
+      "yes" -> "%{legend_setting: :legend_right}"
+      _ -> "%{}"
+    end
+
+    code = ~s"""
+    plot_content = BarChart.new(test_data)
+      |> BarChart.set_val_col_names(#{inspect(chart_options.series_columns)})
+      |> BarChart.type(#{inspect(chart_options.type)})
+      |> BarChart.data_labels(#{inspect((chart_options.show_data_labels == "yes"))})
+      |> BarChart.orientation(#{inspect(chart_options.orientation)})
+      |> BarChart.event_handler("chart1_bar_clicked")
+      |> BarChart.colours(#{inspect(lookup_colours(chart_options.colour_scheme))})
+      #{select_item_line}
+
+    plot = Plot.new(500, 400, plot_content)
+      |> Plot.titles("#{chart_options.title}", nil)
+      |> Plot.plot_options(#{options})
+    """
+
+    {:safe, Makeup.highlight(code)}
   end
 
   defp make_test_data(socket) do
@@ -138,6 +191,12 @@ defmodule ContexSampleWeb.BarChartLive do
   defp random_within_range(min, max) do
     diff = max - min
     (:rand.uniform() * diff) + min
+  end
+
+  defp get_code_highlighter_styles() do
+    style = Makeup.Styles.HTML.StyleMap.friendly_style
+    css = Makeup.stylesheet(style)
+    {:safe, css}
   end
 
 end

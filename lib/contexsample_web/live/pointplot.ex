@@ -63,6 +63,7 @@ defmodule ContexSampleWeb.PointPlotLive do
 
 
   def build_pointplot(dataset, chart_options) do
+
     plot_content = PointPlot.new(dataset)
       |> PointPlot.set_y_col_names(chart_options.series_columns)
       |> PointPlot.colours(lookup_colours(chart_options.colour_scheme))

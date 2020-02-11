@@ -11,6 +11,7 @@ defmodule ContexSampleWeb.Router do
 
   pipeline :browser do
     plug :accepts, ["html"]
+    plug RemoteIp
     plug :basic_log
     plug :fetch_session
     plug :fetch_flash

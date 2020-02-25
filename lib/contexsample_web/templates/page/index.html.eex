@@ -29,7 +29,7 @@
 
 <section class="row">
   <article class="column">
-    <h2>LiveView Demos</h2>
+    <h2>Main LiveView Demos</h2>
     These below demos are all written as Phoenix LiveViews.
     <ul>
       <li>
@@ -57,6 +57,12 @@
     </ul>
   </article>
   <article class="column">
+    <h2>Other Samples</h2>
+    <ul>
+      <li>
+        <%= link "Fun with Scales", to: Routes.live_path(@conn, ContexSampleWeb.ScalesLive) %>
+      </li>
+    </ul>
     <h2>Resources</h2>
     <ul>
       <li>

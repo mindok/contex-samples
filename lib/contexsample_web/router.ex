@@ -31,6 +31,7 @@ defmodule ContexSampleWeb.Router do
     live "/sparklines", SparklineLive
     live "/gantt", GanttLive
     live "/point", PointPlotLive
+    live "/scales", ScalesLive
   end
 
 end

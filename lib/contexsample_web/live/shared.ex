@@ -12,10 +12,12 @@ defmodule ContexSampleWeb.Shared do
       |> update_type(params["type"])
       |> update_orientation(params["orientation"])
       |> Map.put(:show_legend, params["show_legend"])
+      |> Map.put(:show_axislabels, params["show_axislabels"])
       |> Map.put(:show_data_labels, params["show_data_labels"])
       |> Map.put(:show_selected, params["show_selected"])
       |> Map.put(:time_series, params["time_series"])
       |> Map.put(:title, params["title"])
+      |> Map.put(:subtitle, params["subtitle"])
       |> Map.put(:colour_scheme, params["colour_scheme"])
 
      assign(socket, chart_options: options)

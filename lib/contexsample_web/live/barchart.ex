@@ -19,6 +19,9 @@ defmodule ContexSampleWeb.BarChartLive do
               <label for="title">Plot Title</label>
               <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
 
+              <label for="title">Sub Title</label>
+              <input type="text" name="subtitle" id="subtitle" placeholder="Enter subtitle" value=<%= @chart_options.subtitle %>>
+
               <label for="series">Number of series</label>
               <input type="number" name="series" id="series" placeholder="Enter #series" value=<%= @chart_options.series %>>
 
@@ -36,6 +39,9 @@ defmodule ContexSampleWeb.BarChartLive do
 
               <label for="show_legend">Show Legend</label>
               <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
+
+              <label for="show_legend">Show Axis Labels</label>
+              <%= raw_select("show_axislabels", "show_axislabels", yes_no_options(), @chart_options.show_axislabels) %>
 
               <label for="show_data_labels">Show Data Labels</label>
               <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
@@ -73,7 +79,9 @@ defmodule ContexSampleWeb.BarChartLive do
             orientation: :vertical,
             show_data_labels: "yes",
             show_selected: "no",
+            show_axislabels: "no",
             title: nil,
+            subtitle: nil,
             colour_scheme: "themed",
             show_legend: "no"
         })
@@ -122,8 +130,14 @@ defmodule ContexSampleWeb.BarChartLive do
       _ -> %{}
     end
 
+    {x_label, y_label} = case chart_options.show_axislabels do
+      "yes" -> {"x-axis", "y-axis"}
+      _ -> {nil, nil}
+    end
+
     plot = Plot.new(500, 400, plot_content)
-      |> Plot.titles(chart_options.title, nil)
+      |> Plot.titles(chart_options.title, chart_options.subtitle)
+      |> Plot.axis_labels(x_label, y_label)
       |> Plot.plot_options(options)
 
     Plot.to_svg(plot)
@@ -146,6 +160,11 @@ defmodule ContexSampleWeb.BarChartLive do
       _ -> "%{}"
     end
 
+    {x_label, y_label} = case chart_options.show_axislabels do
+      "yes" -> {"x-axis", "y_axis"}
+      _ -> {nil, nil}
+    end
+
     code = ~s"""
     plot_content = BarChart.new(test_data)
       |> BarChart.set_val_col_names(#{inspect(chart_options.series_columns)})
@@ -157,7 +176,8 @@ defmodule ContexSampleWeb.BarChartLive do
       #{select_item_line}
 
     plot = Plot.new(500, 400, plot_content)
-      |> Plot.titles("#{chart_options.title}", nil)
+      |> Plot.titles("#{chart_options.title}", "#{chart_options.subtitle}")
+      |> Plot.axis_labels("#{x_label}", "#{y_label}")
       |> Plot.plot_options(#{options})
     """
 

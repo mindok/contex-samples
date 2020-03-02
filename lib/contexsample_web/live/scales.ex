@@ -21,9 +21,7 @@ defmodule ContexSampleWeb.ScalesLive do
           </div>
         </div>
       </div>
-
     """
-
   end
 
   def mount(_params, socket) do

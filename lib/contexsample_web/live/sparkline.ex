@@ -21,6 +21,9 @@ defmodule ContexSampleWeb.SparklineLive do
 
             <%= make_plot(@test_data) %>Something we're monitoring
             <%= make_red_plot(@test_data) %>Something important we're monitoring
+
+            <p>And here's the data:</p>
+            <%= inspect(@test_data) %>
           </div>
         </div>
       </div>
@@ -88,9 +91,9 @@ defmodule ContexSampleWeb.SparklineLive do
     number_of_points = socket.assigns.chart_options.number_of_points
 
     result = 1..number_of_points
-       |> Enum.map(fn _ -> :rand.uniform(50) end)
+       |> Enum.map(fn _ -> :rand.uniform(50) - 100 end)
 
-    assign(socket, test_data: [0.0 | result])
+    assign(socket, test_data: result)
   end
 
 end

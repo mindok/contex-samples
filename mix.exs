@@ -46,7 +46,8 @@ defmodule Contexsample.MixProject do
       {:timex, "~> 3.6"},
       {:remote_ip, "~> 0.2"},
       {:makeup, "~> 1.0.0"},
-      {:makeup_elixir, "~> 0.14.0"}
+      {:makeup_elixir, "~> 0.14.0"},
+      {:benchee, "~> 1.0", only: :dev}
     ]
   end
 

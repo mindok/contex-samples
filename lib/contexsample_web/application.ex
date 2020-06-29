@@ -6,7 +6,8 @@ defmodule ContexSample.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      ContexSampleWeb.Endpoint
+      ContexSampleWeb.Endpoint,
+      {Phoenix.PubSub, [name: Contexsample.PubSub, adapter: Phoenix.PubSub.PG2]}
     ]
 
     opts = [strategy: :one_for_one, name: Reaction.Supervisor]

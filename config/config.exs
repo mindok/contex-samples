@@ -18,7 +18,7 @@ config :contexsample, ContexSampleWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: secret_key_base,
   render_errors: [view: ContexSampleWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Contexsample.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: Contexsample.PubSub,
   live_view: [signing_salt: "am2/tatn8cjd6Q+A/yZqyA0naK/NVIRb"]
 
 # Configures Elixir's Logger

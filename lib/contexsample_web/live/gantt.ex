@@ -37,7 +37,6 @@ defmodule ContexSampleWeb.GanttLive do
 
     dataset = Dataset.new(data, ["Cat", "Task", "Start", "End"])
     plot_content = GanttChart.new(dataset)
-      |> GanttChart.defaults()
 
     plot = Plot.new(600, 400, plot_content)
       |> Plot.titles("Sample Gantt Chart", nil)

@@ -26,7 +26,8 @@ defmodule ContexSampleWeb.Router do
     get "/", PageController, :index
     get "/faq", PageController, :faq
 
-    live "/barcharts", BarChartLive, session: [:remote_ip]
+#    live "/barcharts", BarChartLive, session: ["remote_ip"]
+    live "/barcharts", BarChartLive
     live "/barchart_timer", BarChartTimer
     live "/sparklines", SparklineLive
     live "/gantt", GanttLive

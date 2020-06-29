@@ -19,7 +19,7 @@ defmodule ContexSampleWeb.GanttLive do
 
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     {:ok, socket}
   end
 

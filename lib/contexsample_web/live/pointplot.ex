@@ -43,7 +43,7 @@ defmodule ContexSampleWeb.PointPlotLive do
 
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     socket =
       socket
       |> assign(chart_options: %{series: 4, points: 100, title: nil, colour_scheme: "default", show_legend: "no", time_series: "no"})

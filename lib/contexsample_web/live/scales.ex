@@ -24,7 +24,7 @@ defmodule ContexSampleWeb.ScalesLive do
     """
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     socket =
       socket
       |> make_test_scales()

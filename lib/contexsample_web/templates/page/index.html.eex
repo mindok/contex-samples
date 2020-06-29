@@ -1,80 +1,92 @@
-<section class="ctx-hero">
-   <h1><img src="images/logo.png" height="30px"/> ContEx</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ContEx Charts</title>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <%= csrf_meta_tag() %>
+  </head>
+  <body>
+      <section class="ctx-hero">
+         <h1><img src="images/logo.png" height="30px"/> ContEx</h1>
 
-  <p>A flexible charting library for Elixir server side charting.</p>
-</section>
+        <p>A flexible charting library for Elixir server side charting.</p>
+      </section>
 
-<section class="row">
-  <h3>Sample charts written in a standard (non-live) view: (plus a sparkline &rarr;<%= sparkline([0, 5, 10, 15, 12, 12, 15, 14, 20, 14, 10, 15, 15]) %>)</h3>
-</section>
-<section class="row">
-  <p>Refresh the page - the charts below will change...</p>
-</section>
-<section class="row">
-  <article class="column">
-      <%= make_a_basic_bar_chart() %>
-  </article>
-  <article class="column">
-      <%= make_a_basic_point_plot() %>
-  </article>
-</section>
-<section class="row">
-  <article class="column">
-      <%= make_a_basic_bar_chart2() %>
-  </article>
-  <article class="column">
-      <%= ContexSampleWeb.GanttLive.build_ganttchart() %>
-  </article>
-</section>
+      <section class="row">
+        <h3>Sample charts written in a standard (non-live) view: (plus a sparkline &rarr;<%= sparkline([0, 5, 10, 15, 12, 12, 15, 14, 20, 14, 10, 15, 15]) %>)</h3>
+      </section>
+      <section class="row">
+        <p>Refresh the page - the charts below will change...</p>
+      </section>
+      <section class="row">
+        <article class="column">
+            <%= make_a_basic_bar_chart() %>
+        </article>
+        <article class="column">
+            <%= make_a_basic_point_plot() %>
+        </article>
+      </section>
+      <section class="row">
+        <article class="column">
+            <%= make_a_basic_bar_chart2() %>
+        </article>
+        <article class="column">
+            <%= ContexSampleWeb.GanttLive.build_ganttchart() %>
+        </article>
+      </section>
 
-<section class="row">
-  <article class="column">
-    <h2>Main LiveView Demos</h2>
-    These below demos are all written as Phoenix LiveViews.
-    <ul>
-      <li>
-        <%= link "Simple Bar Chart", to: Routes.live_path(@conn, ContexSampleWeb.BarChartLive) %>
-        <p>Demonstrates the various options for <code>Contex.BarChart</code><p>
-      </li>
-      <li>
-        <%= link "Bar Chart On Timer", to: Routes.live_path(@conn, ContexSampleWeb.BarChartTimer) %>
-        <p>Shows <code>Contex.BarChart</code> getting updated server-side every 100ms<p>
-      </li>
-      <li>
-        <%= link "Point Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %>
-        <p>A simple <code>Contex.PointPlot</code> demo<p>
-      </li>
-      <li>
-        <%= link "Sparkline", to: Routes.live_path(@conn, ContexSampleWeb.SparklineLive) %>
-        <p>A simple <code>Contex.Sparkline</code> demo<p>
-      </li>
-      <li>
-        <%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %>
-        <p>A super simple <code>Contex.GanttChart</code> demo<p>
-      </li>
+      <section class="row">
+        <article class="column">
+          <h2>Main LiveView Demos</h2>
+          These below demos are all written as Phoenix LiveViews.
+          <ul>
+            <li>
+              <%= link "Simple Bar Chart", to: Routes.live_path(@conn, ContexSampleWeb.BarChartLive) %>
+              <p>Demonstrates the various options for <code>Contex.BarChart</code><p>
+            </li>
+            <li>
+              <%= link "Bar Chart On Timer", to: Routes.live_path(@conn, ContexSampleWeb.BarChartTimer) %>
+              <p>Shows <code>Contex.BarChart</code> getting updated server-side every 100ms<p>
+            </li>
+            <li>
+              <%= link "Point Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %>
+              <p>A simple <code>Contex.PointPlot</code> demo<p>
+            </li>
+            <li>
+              <%= link "Sparkline", to: Routes.live_path(@conn, ContexSampleWeb.SparklineLive) %>
+              <p>A simple <code>Contex.Sparkline</code> demo<p>
+            </li>
+            <li>
+              <%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %>
+              <p>A super simple <code>Contex.GanttChart</code> demo<p>
+            </li>
 
 
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Other Samples</h2>
-    <ul>
-      <li>
-        <%= link "Fun with Scales", to: Routes.live_path(@conn, ContexSampleWeb.ScalesLive) %>
-      </li>
-    </ul>
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/contex/Contex.html">Documentation</a>
-      </li>
-      <li>
-        <a href="https://github.com/mindok/contex">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/mindok/contex/blob/master/CHANGELOG.md">Changelog</a>
-      </li>
-    </ul>
-  </article>
-</section>
-
+          </ul>
+        </article>
+        <article class="column">
+          <h2>Other Samples</h2>
+          <ul>
+            <li>
+              <%= link "Fun with Scales", to: Routes.live_path(@conn, ContexSampleWeb.ScalesLive) %>
+            </li>
+          </ul>
+          <h2>Resources</h2>
+          <ul>
+            <li>
+              <a href="https://hexdocs.pm/contex/Contex.html">Documentation</a>
+            </li>
+            <li>
+              <a href="https://github.com/mindok/contex">Source</a>
+            </li>
+            <li>
+              <a href="https://github.com/mindok/contex/blob/master/CHANGELOG.md">Changelog</a>
+            </li>
+          </ul>
+        </article>
+      </section>
+  </body>
+</html>

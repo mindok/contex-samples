@@ -54,7 +54,7 @@ defmodule ContexSampleWeb.BarChartTimer do
 
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     socket =
       socket
       |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed"})

@@ -15,6 +15,7 @@ defmodule ContexSampleWeb.Shared do
       |> Map.put(:show_axislabels, params["show_axislabels"])
       |> Map.put(:show_data_labels, params["show_data_labels"])
       |> Map.put(:show_selected, params["show_selected"])
+      |> Map.put(:custom_y_ticks, params["custom_y_ticks"])
       |> Map.put(:time_series, params["time_series"])
       |> Map.put(:title, params["title"])
       |> Map.put(:subtitle, params["subtitle"])

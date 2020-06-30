@@ -28,6 +28,9 @@ defmodule ContexSampleWeb.PointPlotLive do
               <label for="show_legend">Show Legend</label>
               <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
 
+              <label for="show_legend">Custom Y Ticks</label>
+              <%= raw_select("custom_y_ticks", "custom_y_ticks", yes_no_options(), @chart_options.custom_y_ticks) %>
+
               <label for="time_series">Time Series</label>
               <%= raw_select("time_series", "time_series", yes_no_options(), @chart_options.time_series) %>
             </form>
@@ -43,10 +46,18 @@ defmodule ContexSampleWeb.PointPlotLive do
 
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(chart_options: %{series: 4, points: 100, title: nil, colour_scheme: "default", show_legend: "no", time_series: "no"})
+      |> assign(chart_options: %{
+          series: 4,
+          points: 100,
+          title: nil,
+          colour_scheme: "default",
+          show_legend: "no",
+          custom_y_ticks: "no",
+          time_series: "no"
+          })
       |> make_test_data()
 
     {:ok, socket}
@@ -63,10 +74,15 @@ defmodule ContexSampleWeb.PointPlotLive do
 
 
   def build_pointplot(dataset, chart_options) do
+    y_tick_formatter = case chart_options.custom_y_ticks do
+      "yes" -> &custom_axis_formatter/1
+      _ -> nil
+    end
 
     plot_content = PointPlot.new(dataset)
       |> PointPlot.set_y_col_names(chart_options.series_columns)
       |> PointPlot.colours(lookup_colours(chart_options.colour_scheme))
+      |> PointPlot.custom_y_formatter(y_tick_formatter)
 
     options = case chart_options.show_legend do
       "yes" -> %{legend_setting: :legend_right}
@@ -117,6 +133,10 @@ defmodule ContexSampleWeb.PointPlotLive do
   defp random_within_range(min, max) do
     diff = max - min
     (:rand.uniform() * diff) + min
+  end
+
+  def custom_axis_formatter(value) do
+    "V #{:erlang.float_to_binary(value/1_000.0, [decimals: 2])}K"
   end
 
 

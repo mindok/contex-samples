@@ -32,7 +32,7 @@ defmodule ContexSampleWeb.SparklineLive do
 
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     socket =
       socket
       |> assign(chart_options: %{refresh_rate: 1000, number_of_points: 50})

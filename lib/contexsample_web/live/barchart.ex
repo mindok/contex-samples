@@ -69,7 +69,7 @@ defmodule ContexSampleWeb.BarChartLive do
 
   end
 
-  def mount(_params, socket) do
+  def mount(_params, _session, socket) do
     socket =
       socket
       |> assign(chart_options: %{

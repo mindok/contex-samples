@@ -11,7 +11,7 @@
   <body>
     <header>
       <section class="ctx-hero">
-         <h1>About ContEx Charts <img src="images/logo.png" height="30px"/></h1>
+         <h1><a href="/" class="">About ContEx Charts <img src="images/logo.png" height="30px"/></a></h1>
       </section>
 
       <section class="row">

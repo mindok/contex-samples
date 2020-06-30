@@ -40,7 +40,7 @@
 
       <section class="row">
         <article class="column">
-          <h2>Main LiveView Demos</h2>
+          <h2>LiveView Demos</h2>
           These below demos are all written as Phoenix LiveViews.
           <ul>
             <li>
@@ -76,6 +76,9 @@
           </ul>
           <h2>Resources</h2>
           <ul>
+            <li>
+              <a href="/faq">FAQ</a>
+            </li>
             <li>
               <a href="https://hexdocs.pm/contex/Contex.html">Documentation</a>
             </li>

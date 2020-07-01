@@ -31,6 +31,5 @@ config :contexsample, ContexSampleWeb.Endpoint,
   secret_key_base: secret_key_base,
   server: true,
   check_origin: ["https://contex-charts.org", "http://localhost:4000"],
-  pubsub: [name: Contexsample.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: Contexsample.PubSub,
   live_view: [signing_salt: live_view_signing_salt]
-

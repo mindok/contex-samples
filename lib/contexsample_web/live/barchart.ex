@@ -10,7 +10,7 @@ defmodule ContexSampleWeb.BarChartLive do
     ~L"""
       <style><%= get_code_highlighter_styles() %></style>
       <h3>Simple Bar Chart Example</h3>
-      <p>Source code can be found <a href="https://github.com/mindok/contex-samples/blob/master/lib/contexsample_web/live/BarChart.ex">on Github</a></p>
+      <p>Source code can be found <a href="https://github.com/mindok/contex-samples/blob/master/lib/contexsample_web/live/barchart.ex">on Github</a></p>
       <div class="container">
         <div class="row">
           <div class="column column-25">

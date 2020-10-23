@@ -52,8 +52,8 @@
               <p>Shows <code>Contex.BarChart</code> getting updated server-side every 100ms<p>
             </li>
             <li>
-              <%= link "Point Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %>
-              <p>A simple <code>Contex.PointPlot</code> demo<p>
+              <%= link "Point Plot / Line Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %>
+              <p>A simple <code>Contex.PointPlot</code> demo - also shows <code>Contex.LinePlot</code><p>
             </li>
             <li>
               <%= link "Sparkline", to: Routes.live_path(@conn, ContexSampleWeb.SparklineLive) %>
@@ -72,6 +72,9 @@
           <ul>
             <li>
               <%= link "Fun with Scales", to: Routes.live_path(@conn, ContexSampleWeb.ScalesLive) %>
+            </li>
+            <li>
+              <%= link "Barchart in LiveComponent", to: Routes.live_path(@conn, ContexSampleWeb.MultiBarChart) %>
             </li>
           </ul>
           <h2>Resources</h2>

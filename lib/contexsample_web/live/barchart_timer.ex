@@ -90,11 +90,14 @@ defmodule ContexSampleWeb.BarChartTimer do
   end
 
   def basic_plot(test_data, chart_options) do
-    plot_content = BarChart.new(test_data)
-      |> BarChart.set_val_col_names(chart_options.series_columns)
-      |> BarChart.type(chart_options.type)
-      |> BarChart.orientation(chart_options.orientation)
-      |> BarChart.colours(lookup_colours(chart_options.colour_scheme))
+    options = [
+      mapping: %{category_col: "Category", value_cols: chart_options.series_columns},
+      type: chart_options.type,
+      orientation: chart_options.orientation,
+      colour_palette: lookup_colours(chart_options.colour_scheme)
+    ]
+
+    plot_content = BarChart.new(test_data, options)
       |> BarChart.force_value_range({0, chart_options.series * 2.0})
 
     plot = Plot.new(500, 400, plot_content)

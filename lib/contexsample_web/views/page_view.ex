@@ -5,12 +5,12 @@ defmodule ContexSampleWeb.PageView do
 
   def make_a_basic_bar_chart() do
     %{dataset: dataset, series_cols: series_cols} = make_test_bar_data(10, 4)
-    plot_content = BarChart.new(dataset)
-    |> BarChart.set_val_col_names(series_cols)
-    |> BarChart.colours(["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"])
+    options = [
+      mapping: %{category_col: "Category", value_cols: series_cols},
+      colour_palette: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
+    ]
 
-
-    plot = Plot.new(500, 300, plot_content)
+    plot = Plot.new(dataset, BarChart, 500, 300, options)
       |> Plot.titles("Sample Bar Chart", nil)
       |> Plot.plot_options(%{legend_setting: :legend_right})
 
@@ -19,13 +19,14 @@ defmodule ContexSampleWeb.PageView do
 
   def make_a_basic_bar_chart2() do
     %{dataset: dataset, series_cols: series_cols} = make_test_bar_data(10, 4)
-    plot_content = BarChart.new(dataset)
-    |> BarChart.set_val_col_names(series_cols)
-    |> BarChart.orientation(:horizontal)
-    |> BarChart.colours(["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"])
 
+    options = [
+      mapping: %{category_col: "Category", value_cols: series_cols},
+      orientation: :horizontal,
+      colour_palette: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
+    ]
 
-    plot = Plot.new(500, 300, plot_content)
+    plot = Plot.new(dataset, BarChart, 500, 300, options)
       |> Plot.titles("Sample Bar Chart", nil)
 
     Plot.to_svg(plot)
@@ -33,10 +34,12 @@ defmodule ContexSampleWeb.PageView do
 
   def make_a_basic_point_plot() do
     dataset = make_test_point_data(300)
-    plot_content = PointPlot.new(dataset)
-    |> PointPlot.set_y_col_names(["Something", "Another"])
 
-    plot = Plot.new(500, 300, plot_content)
+    options = [
+      mapping: %{x_col: "X", y_cols: ["Something", "Another"]},
+    ]
+
+    plot = Plot.new(dataset, PointPlot, 500, 300, options)
       |> Plot.titles("Sample Scatter Plot", nil)
       |> Plot.plot_options(%{legend_setting: :legend_right})
 
@@ -85,4 +88,3 @@ defmodule ContexSampleWeb.PageView do
 
 
 end
-

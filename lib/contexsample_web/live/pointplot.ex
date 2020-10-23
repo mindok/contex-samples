@@ -4,7 +4,7 @@ defmodule ContexSampleWeb.PointPlotLive do
 
   import ContexSampleWeb.Shared
 
-  alias Contex.{PointPlot, Dataset, Plot}
+  alias Contex.{LinePlot, PointPlot, Dataset, Plot}
 
   def render(assigns) do
     ~L"""
@@ -22,11 +22,23 @@ defmodule ContexSampleWeb.PointPlotLive do
               <label for="points">Number of points</label>
               <input type="number" name="points" id="points" placeholder="Enter #series" value=<%= @chart_options.points %>>
 
+              <label for="type">Type</label>
+              <%= raw_select("type", "type", simple_option_list(~w(point line)), @chart_options.type) %>
+
+              <label for="type">Smoothed</label>
+              <%= raw_select("smoothed", "smoothed", yes_no_options(), @chart_options.smoothed) %>
+
               <label for="colour_scheme">Colour Scheme</label>
               <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
 
               <label for="show_legend">Show Legend</label>
               <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
+
+              <label for="show_legend">Custom X Scale</label>
+              <%= raw_select("custom_x_scale", "custom_x_scale", yes_no_options(), @chart_options.custom_x_scale) %>
+
+              <label for="show_legend">Custom Y Scale</label>
+              <%= raw_select("custom_y_scale", "custom_y_scale", yes_no_options(), @chart_options.custom_y_scale) %>
 
               <label for="show_legend">Custom Y Ticks</label>
               <%= raw_select("custom_y_ticks", "custom_y_ticks", yes_no_options(), @chart_options.custom_y_ticks) %>
@@ -51,13 +63,18 @@ defmodule ContexSampleWeb.PointPlotLive do
       socket
       |> assign(chart_options: %{
           series: 4,
-          points: 100,
+          points: 30,
           title: nil,
+          type: "point",
+          smoothed: "yes",
           colour_scheme: "default",
           show_legend: "no",
+          custom_x_scale: "no",
+          custom_y_scale: "no",
           custom_y_ticks: "no",
           time_series: "no"
           })
+      |> assign(prev_series: 0, prev_points: 0)
       |> make_test_data()
 
     {:ok, socket}
@@ -79,20 +96,32 @@ defmodule ContexSampleWeb.PointPlotLive do
       _ -> nil
     end
 
-    plot_content = PointPlot.new(dataset)
-      |> PointPlot.set_y_col_names(chart_options.series_columns)
-      |> PointPlot.colours(lookup_colours(chart_options.colour_scheme))
-      |> PointPlot.custom_y_formatter(y_tick_formatter)
+    module = case chart_options.type do
+      "line" -> LinePlot
+      _ -> PointPlot
+    end
 
-    options = case chart_options.show_legend do
+    custom_x_scale = make_custom_x_scale(chart_options)
+    custom_y_scale = make_custom_y_scale(chart_options)
+
+    options = [
+      mapping: %{x_col: "X", y_cols: chart_options.series_columns},
+      colour_palette: lookup_colours(chart_options.colour_scheme),
+      custom_x_scale: custom_x_scale,
+      custom_y_scale: custom_y_scale,
+      custom_y_formatter: y_tick_formatter,
+      smoothed: (chart_options.smoothed == "yes")
+    ]
+
+    plot_options = case chart_options.show_legend do
       "yes" -> %{legend_setting: :legend_right}
       _ -> %{}
     end
 
 
-    plot = Plot.new(600, 400, plot_content)
+    plot = Plot.new(dataset, module, 600, 400, options)
       |> Plot.titles(chart_options.title, nil)
-      |> Plot.plot_options(options)
+      |> Plot.plot_options(plot_options)
 
     Plot.to_svg(plot)
   end
@@ -100,13 +129,17 @@ defmodule ContexSampleWeb.PointPlotLive do
   defp make_test_data(socket) do
     options = socket.assigns.chart_options
     time_series = (options.time_series == "yes")
+    prev_series = socket.assigns.prev_series
+    prev_points = socket.assigns.prev_points
     series = options.series
     points = options.points
 
+    needs_update = (prev_series != series) or (prev_points != points)
+
     data = for i <- 1..points do
-      x = random_within_range(0.0, 30 + (i * 3.0))
+      x = (i * 5) + random_within_range(0.0, 3.0)
       series_data = for s <- 1..series do
-        (s * 8.0) + random_within_range(x * (0.1 * s), x * (0.15 * s))
+        (s * 8.0) + random_within_range(x * (0.1 * s), x * (0.35 * s))
       end
       [calc_x(x, i, time_series) | series_data]
     end
@@ -115,11 +148,19 @@ defmodule ContexSampleWeb.PointPlotLive do
       "Series #{s}"
     end
 
-    test_data = Dataset.new(data, ["X" | series_cols])
+    test_data = case needs_update do
+      true ->  Dataset.new(data, ["X" | series_cols])
+      _ -> socket.assigns.test_data
+    end
 
     options = Map.put(options, :series_columns, series_cols)
 
-    assign(socket, test_data: test_data, chart_options: options)
+    assign(socket,
+      test_data: test_data,
+      chart_options: options,
+      prev_series: series,
+      prev_points: points
+    )
   end
 
   @date_min ~N{2019-10-01 10:00:00}
@@ -137,6 +178,32 @@ defmodule ContexSampleWeb.PointPlotLive do
 
   def custom_axis_formatter(value) do
     "V #{:erlang.float_to_binary(value/1_000.0, [decimals: 2])}K"
+  end
+
+  defp make_custom_x_scale(%{custom_x_scale: x}=_chart_options) when x != "yes", do: nil
+  defp make_custom_x_scale(chart_options) do
+    points = chart_options.points
+    case (chart_options.time_series == "yes") do
+      true ->
+        Contex.TimeScale.new()
+        |> Contex.TimeScale.domain(
+            @date_min,
+            Timex.add(@date_min, Timex.Duration.from_microseconds(points * 1.2 * @interval_us))
+            )
+
+      _ ->
+        Contex.ContinuousLinearScale.new()
+        |> Contex.ContinuousLinearScale.domain(0, 100)
+        |> Contex.ContinuousLinearScale.interval_count(20)
+
+    end
+  end
+
+  defp make_custom_y_scale(%{custom_y_scale: x}=_chart_options) when x != "yes", do: nil
+  defp make_custom_y_scale(_chart_options) do
+    Contex.ContinuousLinearScale.new()
+    |> Contex.ContinuousLinearScale.domain(0, 100)
+    |> Contex.ContinuousLinearScale.interval_count(20)
   end
 
 

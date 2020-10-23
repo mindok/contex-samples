@@ -15,6 +15,10 @@ defmodule ContexSampleWeb.Shared do
       |> Map.put(:show_axislabels, params["show_axislabels"])
       |> Map.put(:show_data_labels, params["show_data_labels"])
       |> Map.put(:show_selected, params["show_selected"])
+      |> Map.put(:smoothed, params["smoothed"])
+      |> Map.put(:custom_value_scale, params["custom_value_scale"])
+      |> Map.put(:custom_x_scale, params["custom_x_scale"])
+      |> Map.put(:custom_y_scale, params["custom_y_scale"])
       |> Map.put(:custom_y_ticks, params["custom_y_ticks"])
       |> Map.put(:time_series, params["time_series"])
       |> Map.put(:title, params["title"])
@@ -84,7 +88,7 @@ defmodule ContexSampleWeb.Shared do
     case raw do
       "stacked" -> Map.put(options, :type, :stacked)
       "grouped" -> Map.put(options, :type, :grouped)
-      _-> options
+      _-> Map.put(options, :type, raw)
     end
   end
 

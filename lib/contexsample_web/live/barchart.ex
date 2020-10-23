@@ -46,6 +46,9 @@ defmodule ContexSampleWeb.BarChartLive do
               <label for="show_data_labels">Show Data Labels</label>
               <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
 
+              <label for="show_legend">Custom Value Scale</label>
+              <%= raw_select("custom_value_scale", "custom_value_scale", yes_no_options(), @chart_options.custom_value_scale) %>
+
               <label for="show_selected">Show Clicked Bar</label>
               <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart_options.show_selected) %>
             </form>
@@ -80,6 +83,7 @@ defmodule ContexSampleWeb.BarChartLive do
             show_data_labels: "yes",
             show_selected: "no",
             show_axislabels: "no",
+            custom_value_scale: "no",
             title: nil,
             subtitle: nil,
             colour_scheme: "themed",
@@ -111,21 +115,26 @@ defmodule ContexSampleWeb.BarChartLive do
   end
 
   def basic_plot(test_data, chart_options, selected_bar) do
-    plot_content = BarChart.new(test_data)
-      |> BarChart.set_val_col_names(chart_options.series_columns)
-      |> BarChart.type(chart_options.type)
-      |> BarChart.data_labels(chart_options.show_data_labels == "yes")
-      |> BarChart.orientation(chart_options.orientation)
-      |> BarChart.event_handler("chart1_bar_clicked")
-      |> BarChart.colours(lookup_colours(chart_options.colour_scheme))
 
-
-    plot_content = case chart_options.show_selected do
-      "yes" -> BarChart.select_item(plot_content, selected_bar)
-      _ -> plot_content
+    selected_item = case chart_options.show_selected do
+      "yes" -> selected_bar
+      _ -> nil
     end
 
-    options = case chart_options.show_legend do
+    custom_value_scale = make_custom_value_scale(chart_options)
+
+    options = [
+      mapping: %{category_col: "Category", value_cols: chart_options.series_columns},
+      type: chart_options.type,
+      data_labels: (chart_options.show_data_labels == "yes"),
+      orientation: chart_options.orientation,
+      phx_event_handler: "chart1_bar_clicked",
+      custom_value_scale: custom_value_scale,
+      colour_palette: lookup_colours(chart_options.colour_scheme),
+      select_item: selected_item
+    ]
+
+    plot_options = case chart_options.show_legend do
       "yes" -> %{legend_setting: :legend_right}
       _ -> %{}
     end
@@ -135,10 +144,10 @@ defmodule ContexSampleWeb.BarChartLive do
       _ -> {nil, nil}
     end
 
-    plot = Plot.new(500, 400, plot_content)
+    plot = Plot.new(test_data, BarChart, 500, 400, options)
       |> Plot.titles(chart_options.title, chart_options.subtitle)
       |> Plot.axis_labels(x_label, y_label)
-      |> Plot.plot_options(options)
+      |> Plot.plot_options(plot_options)
 
     Plot.to_svg(plot)
   end
@@ -148,9 +157,9 @@ defmodule ContexSampleWeb.BarChartLive do
     select_item_line = case chart_options.show_selected do
       "yes" ->
         if is_nil(selected_bar) do
-          ~s|\|> BarChart.select_item(nil)|
+          ~s|nil|
         else
-          ~s|\|> BarChart.select_item(%{category: "#{selected_bar.category}", series: "#{selected_bar.series}"})|
+          ~s|%{category: "#{selected_bar.category}", series: "#{selected_bar.series}"}|
         end
       _ -> ""
     end
@@ -165,17 +174,30 @@ defmodule ContexSampleWeb.BarChartLive do
       _ -> {nil, nil}
     end
 
-    code = ~s"""
-    plot_content = BarChart.new(test_data)
-      |> BarChart.set_val_col_names(#{inspect(chart_options.series_columns)})
-      |> BarChart.type(#{inspect(chart_options.type)})
-      |> BarChart.data_labels(#{inspect((chart_options.show_data_labels == "yes"))})
-      |> BarChart.orientation(#{inspect(chart_options.orientation)})
-      |> BarChart.event_handler("chart1_bar_clicked")
-      |> BarChart.colours(#{inspect(lookup_colours(chart_options.colour_scheme))})
-      #{select_item_line}
+    custom_value_scale = case chart_options.custom_value_scale do
+      "yes" ->
+        """
+        custom_value_scale = Contex.ContinuousLinearScale.new()
+          |> Contex.ContinuousLinearScale.domain(0, 500)
+          |> Contex.ContinuousLinearScale.interval_count(25)
+        """
+        _ -> ""
+    end
 
-    plot = Plot.new(500, 400, plot_content)
+    code = ~s"""
+    #{custom_value_scale}
+    options = [
+      mapping: %{category_col: "Category", value_cols: #{inspect(chart_options.series_columns)}},
+      type: #{inspect(chart_options.type)},
+      data_labels: #{inspect((chart_options.show_data_labels == "yes"))},
+      orientation: #{inspect(chart_options.orientation)},
+      phx_event_handler: "chart1_bar_clicked",
+      colour_palette: #{inspect(lookup_colours(chart_options.colour_scheme))},
+      select_item: #{select_item_line},
+      #{if custom_value_scale != "" do "custom_value_scale: custom_value_scale" end}
+    ]
+
+    plot = Plot.new(test_data, BarChart, 500, 400, options)
       |> Plot.titles("#{chart_options.title}", "#{chart_options.subtitle}")
       |> Plot.axis_labels("#{x_label}", "#{y_label}")
       |> Plot.plot_options(#{options})
@@ -212,6 +234,14 @@ defmodule ContexSampleWeb.BarChartLive do
     diff = max - min
     (:rand.uniform() * diff) + min
   end
+
+  defp make_custom_value_scale(%{custom_value_scale: x}=_chart_options) when x != "yes", do: nil
+  defp make_custom_value_scale(_chart_options) do
+    Contex.ContinuousLinearScale.new()
+    |> Contex.ContinuousLinearScale.domain(0, 500)
+    |> Contex.ContinuousLinearScale.interval_count(25)
+  end
+
 
   defp get_code_highlighter_styles() do
     style = Makeup.Styles.HTML.StyleMap.friendly_style

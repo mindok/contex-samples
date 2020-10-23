@@ -30,6 +30,7 @@ defmodule ContexSampleWeb.Router do
 #    live "/barcharts", BarChartLive, session: ["remote_ip"]
     live "/barcharts", BarChartLive, layout: {ContexSampleWeb.LayoutView, :root}
     live "/barchart_timer", BarChartTimer, layout: {ContexSampleWeb.LayoutView, :root}
+    live "/multibar", MultiBarChart, layout: {ContexSampleWeb.LayoutView, :root}
     live "/sparklines", SparklineLive, layout: {ContexSampleWeb.LayoutView, :root}
     live "/gantt", GanttLive, layout: {ContexSampleWeb.LayoutView, :root}
     live "/point", PointPlotLive, layout: {ContexSampleWeb.LayoutView, :root}

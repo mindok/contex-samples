@@ -74,7 +74,7 @@ defmodule ContexSampleWeb.PointPlotLive do
           custom_y_ticks: "no",
           time_series: "no"
           })
-      |> assign(prev_series: 0, prev_points: 0)
+      |> assign(prev_series: 0, prev_points: 0, prev_time_series: nil)
       |> make_test_data()
 
     {:ok, socket}
@@ -131,10 +131,11 @@ defmodule ContexSampleWeb.PointPlotLive do
     time_series = (options.time_series == "yes")
     prev_series = socket.assigns.prev_series
     prev_points = socket.assigns.prev_points
+    prev_time_series = socket.assigns.prev_time_series
     series = options.series
     points = options.points
 
-    needs_update = (prev_series != series) or (prev_points != points)
+    needs_update = (prev_series != series) or (prev_points != points) or (prev_time_series != time_series)
 
     data = for i <- 1..points do
       x = (i * 5) + random_within_range(0.0, 3.0)
@@ -159,15 +160,16 @@ defmodule ContexSampleWeb.PointPlotLive do
       test_data: test_data,
       chart_options: options,
       prev_series: series,
-      prev_points: points
+      prev_points: points,
+      prev_time_series: time_series
     )
   end
 
   @date_min ~N{2019-10-01 10:00:00}
-  @interval_us 600 * 1_000_000
+  @interval_seconds 600
   defp calc_x(x, _, false), do: x
   defp calc_x(_, i, _) do
-    Timex.add(@date_min, Timex.Duration.from_microseconds(i * @interval_us))
+    NaiveDateTime.add(@date_min, (i * @interval_seconds))
   end
 
 
@@ -176,8 +178,12 @@ defmodule ContexSampleWeb.PointPlotLive do
     (:rand.uniform() * diff) + min
   end
 
-  def custom_axis_formatter(value) do
+  def custom_axis_formatter(value) when is_float(value) do
     "V #{:erlang.float_to_binary(value/1_000.0, [decimals: 2])}K"
+  end
+
+  def custom_axis_formatter(value) do
+    "V #{value}"
   end
 
   defp make_custom_x_scale(%{custom_x_scale: x}=_chart_options) when x != "yes", do: nil
@@ -188,7 +194,7 @@ defmodule ContexSampleWeb.PointPlotLive do
         Contex.TimeScale.new()
         |> Contex.TimeScale.domain(
             @date_min,
-            Timex.add(@date_min, Timex.Duration.from_microseconds(points * 1.2 * @interval_us))
+            NaiveDateTime.add(@date_min, trunc(points * 1.2 * @interval_seconds))
             )
 
       _ ->

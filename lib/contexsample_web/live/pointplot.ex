@@ -140,7 +140,12 @@ defmodule ContexSampleWeb.PointPlotLive do
     data = for i <- 1..points do
       x = (i * 5) + random_within_range(0.0, 3.0)
       series_data = for s <- 1..series do
-        (s * 8.0) + random_within_range(x * (0.1 * s), x * (0.35 * s))
+        val = (s * 8.0) + random_within_range(x * (0.1 * s), x * (0.35 * s))
+        # simulate nils in data
+        case s == 2 and ((i > 3 and i < 6) or (i > 7 and i < 10))  do
+          true -> nil
+          _ -> val
+        end
       end
       [calc_x(x, i, time_series) | series_data]
     end

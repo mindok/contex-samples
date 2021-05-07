@@ -63,6 +63,10 @@
               <%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %>
               <p>A super simple <code>Contex.GanttChart</code> demo<p>
             </li>
+            <li>
+              <%= link "Pie Chart", to: Routes.live_path(@conn, ContexSampleWeb.PieChartLive) %>
+              <p>A super simple <code>Contex.PieChart</code> demo<p>
+            </li>
 
 
           </ul>

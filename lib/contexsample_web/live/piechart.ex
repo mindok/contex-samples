@@ -20,7 +20,7 @@ defmodule ContexSampleWeb.PieChartLive do
 
             <%= make_piechart(@test_data) %>
             <p>And here's the data:</p>
-            <%= inspect(@test_data.data) %>
+            <code><%= inspect(@test_data) %></code>
           </div>
         </div>
       </div>

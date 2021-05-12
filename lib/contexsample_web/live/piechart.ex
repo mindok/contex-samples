@@ -2,7 +2,7 @@ defmodule ContexSampleWeb.PieChartLive do
   use Phoenix.LiveView
   use Phoenix.HTML
 
-  alias Contex.PieChart
+  alias Contex.SimplePie
 
   def render(assigns) do
     ~L"""
@@ -14,13 +14,30 @@ defmodule ContexSampleWeb.PieChartLive do
               <label for="refresh_rate">Refresh Rate</label>
               <input type="number" name="refresh_rate" id="refresh_rate" placeholder="Enter refresh rate" value=<%= @chart_options.refresh_rate %>>
 
-              <label for="number_of_points">Number of points</label>
-              <input type="number" name="number_of_points" id="number_of_points" placeholder="Enter #series" value=<%= @chart_options.number_of_points %>>
+              <label for="number_of_categories">Number of categories</label>
+              <input type="number" name="number_of_categories" id="number_of_categories" placeholder="Enter #series" value=<%= @chart_options.number_of_categories %>>
             </form>
 
-            <%= make_piechart(@test_data) %>
-            <p>And here's the data:</p>
-            <code><%= inspect(@test_data) %></code>
+            <table>
+              <thead>
+                <tr>
+                  <th>SVG</th>
+                  <th>Data</th>
+                </tr>
+              <thead>
+              <tbody>
+                <%= for data <- @simple_pie_data do %>
+                  <tr>
+                    <th>
+                      <%= make_simple_pie(data) %>
+                    </th>
+                    <td>
+                      <code><%= inspect(data) %></code>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -30,7 +47,7 @@ defmodule ContexSampleWeb.PieChartLive do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(chart_options: %{refresh_rate: 5_000, number_of_points: 4})
+      |> assign(chart_options: %{refresh_rate: 5_000, number_of_categories: 4})
       |> make_test_data()
 
     if connected?(socket),
@@ -42,7 +59,7 @@ defmodule ContexSampleWeb.PieChartLive do
   def handle_event("chart_options_changed", %{} = params, socket) do
     options =
       socket.assigns.chart_options
-      |> update_if_positive_int(:number_of_points, params["number_of_points"])
+      |> update_if_positive_int(:number_of_categories, params["number_of_categories"])
       |> update_if_positive_int(:refresh_rate, params["refresh_rate"])
 
     socket = assign(socket, chart_options: options)
@@ -70,19 +87,20 @@ defmodule ContexSampleWeb.PieChartLive do
     end
   end
 
-  defp make_piechart(dataset) do
-    PieChart.new(dataset)
-    |> PieChart.draw()
+  defp make_simple_pie(data) do
+    SimplePie.new(data)
+    |> SimplePie.draw()
   end
 
   defp make_test_data(socket) do
-    number_of_points = socket.assigns.chart_options.number_of_points
+    number_of_categories = socket.assigns.chart_options.number_of_categories
 
-    {values, categories} =
-      1..number_of_points
-      |> Enum.map(fn i -> {:rand.uniform(100), "Category ##{i}"} end)
-      |> Enum.unzip()
+    simple_pie_data =
+      Enum.map(1..3, fn _ ->
+        1..number_of_categories
+        |> Enum.map(fn i -> {"Category ##{i}", :rand.uniform(100)} end)
+      end)
 
-    assign(socket, test_data: Contex.Dataset.new(values, categories))
+    assign(socket, simple_pie_data: simple_pie_data)
   end
 end

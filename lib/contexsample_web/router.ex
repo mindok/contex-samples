@@ -35,6 +35,7 @@ defmodule ContexSampleWeb.Router do
     live "/gantt", GanttLive, layout: {ContexSampleWeb.LayoutView, :root}
     live "/point", PointPlotLive, layout: {ContexSampleWeb.LayoutView, :root}
     live "/scales", ScalesLive, layout: {ContexSampleWeb.LayoutView, :root}
+    live("/piechart", PieChartLive, layout: {ContexSampleWeb.LayoutView, :root})
   end
 
 end

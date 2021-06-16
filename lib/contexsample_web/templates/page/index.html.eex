@@ -65,7 +65,7 @@
             </li>
             <li>
               <%= link "Pie Chart", to: Routes.live_path(@conn, ContexSampleWeb.PieChartLive) %>
-              <p>A super simple <code>Contex.PieChart</code> demo<p>
+              <p>A super simple <code>Contex.SimplePie</code> demo<p>
             </li>
 
 

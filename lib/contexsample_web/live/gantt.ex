@@ -36,10 +36,16 @@ defmodule ContexSampleWeb.GanttLive do
         end)
 
     dataset = Dataset.new(data, ["Cat", "Task", "Start", "End"])
-    plot_content = GanttChart.new(dataset)
 
-    plot = Plot.new(600, 400, plot_content)
-      |> Plot.titles("Sample Gantt Chart", nil)
+    opts =
+      [
+        mapping:  %{category_col: "Cat", task_col: "Task", start_col: "Start", finish_col: "End"},
+        colour_palette: ContexSampleWeb.Shared.lookup_colours("themed")
+      ]
+
+    plot
+      = Plot.new(dataset, GanttChart, 600, 400, opts)
+       |> Plot.titles("Sample Gantt Chart", nil)
 
     Plot.to_svg(plot)
   end

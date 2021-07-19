@@ -2,42 +2,36 @@ defmodule ContexSampleWeb.PieChartLive do
   use Phoenix.LiveView
   use Phoenix.HTML
 
-  alias Contex.SimplePie
+  import ContexSampleWeb.Shared
+
+  alias Contex.PieChart
 
   def render(assigns) do
     ~L"""
-      <h3>Simple Pie Chart Example</h3>
+      <h3>Pie Chart Example</h3>
       <div class="container">
         <div class="row">
-          <div class="column">
+          <div class="column column-25">
             <form phx-change="chart_options_changed">
-              <label for="refresh_rate">Refresh Rate</label>
-              <input type="number" name="refresh_rate" id="refresh_rate" placeholder="Enter refresh rate" value=<%= @chart_options.refresh_rate %>>
+              <label for="title">Pie Title</label>
+              <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
 
-              <label for="number_of_categories">Number of categories</label>
-              <input type="number" name="number_of_categories" id="number_of_categories" placeholder="Enter #series" value=<%= @chart_options.number_of_categories %>>
+              <label for="colour_scheme">Colour Scheme</label>
+              <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
+
+              <label for="categories">Number of categories</label>
+              <input type="number" name="categories" id="categories" placeholder="Enter #series" value=<%= @chart_options.categories %>>
+
+              <label for="show_legend">Show Legend</label>
+              <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
+
+              <label for="show_data_labels">Show Data Labels</label>
+              <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
             </form>
+          </div> <!-- column-23 -->
 
-            <table>
-              <thead>
-                <tr>
-                  <th>SVG</th>
-                  <th>Data</th>
-                </tr>
-              <thead>
-              <tbody>
-                <%= for data <- @simple_pie_data do %>
-                  <tr>
-                    <th>
-                      <%= make_simple_pie(data) %>
-                    </th>
-                    <td>
-                      <code><%= inspect(data) %></code>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
+          <div class="column column-75">
+            <%= build_pieplot(assigns) %>
           </div>
         </div>
       </div>
@@ -47,60 +41,59 @@ defmodule ContexSampleWeb.PieChartLive do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(chart_options: %{refresh_rate: 5_000, number_of_categories: 4})
+      |> assign(
+        chart_options: %{
+          categories: 4,
+          colour_scheme: "default",
+          show_legend: "no",
+          show_data_labels: "yes",
+          title: ""
+        }
+      )
       |> make_test_data()
-
-    if connected?(socket),
-      do: Process.send_after(self(), :tick, socket.assigns.chart_options.refresh_rate)
 
     {:ok, socket}
   end
 
   def handle_event("chart_options_changed", %{} = params, socket) do
-    options =
-      socket.assigns.chart_options
-      |> update_if_positive_int(:number_of_categories, params["number_of_categories"])
-      |> update_if_positive_int(:refresh_rate, params["refresh_rate"])
-
-    socket = assign(socket, chart_options: options)
-
-    {:noreply, socket}
-  end
-
-  def handle_info(:tick, socket) do
-    Process.send_after(self(), :tick, socket.assigns.chart_options.refresh_rate)
-
     socket =
       socket
+      |> update_chart_options_from_params(params)
       |> make_test_data()
 
     {:noreply, socket}
   end
 
-  defp update_if_positive_int(map, key, possible_value) do
-    case Integer.parse(possible_value) do
-      {val, ""} ->
-        if val > 0, do: Map.put(map, key, val), else: map
+  defp build_pieplot(%{dataset: dataset, chart_options: chart_options}) do
+    options = [
+      mapping: %{category_col: "Category", value_col: "Preference"},
+      data_labels: chart_options.show_data_labels == "yes",
+      colour_palette: lookup_colours(chart_options.colour_scheme)
+    ]
 
-      _ ->
-        map
-    end
-  end
+    plot_options =
+      case chart_options.show_legend do
+        "yes" -> %{legend_setting: :legend_right}
+        _ -> %{}
+      end
 
-  defp make_simple_pie(data) do
-    SimplePie.new(data)
-    |> SimplePie.draw()
+    plot =
+      Contex.Plot.new(dataset, PieChart, 600, 400, options)
+      |> Contex.Plot.titles(chart_options.title, nil)
+      |> Contex.Plot.plot_options(plot_options)
+
+    Contex.Plot.to_svg(plot)
   end
 
   defp make_test_data(socket) do
-    number_of_categories = socket.assigns.chart_options.number_of_categories
+    categories = socket.assigns.chart_options.categories
 
-    simple_pie_data =
-      Enum.map(1..3, fn _ ->
-        1..number_of_categories
-        |> Enum.map(fn i -> {"Category ##{i}", :rand.uniform(100)} end)
-      end)
+    data =
+      1..categories
+      |> Enum.map(fn i -> {"Category ##{i}", :rand.uniform(100)} end)
 
-    assign(socket, simple_pie_data: simple_pie_data)
+    dataset = Contex.Dataset.new(data, ["Category", "Preference"])
+
+    assign(socket, dataset: dataset)
   end
 end

@@ -41,8 +41,8 @@ defmodule Contexsample.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2.1"},
       {:plug_cowboy, "~> 2.3"},
-      #{:contex, path: "../contex"},
-      {:contex, git: "https://github.com/mindok/contex"},
+      {:contex, path: "../contex"},
+      # {:contex, git: "https://github.com/mindok/contex"},
       {:timex, "~> 3.6"},
       {:remote_ip, "~> 0.2"},
       {:makeup, "~> 1.0.3"},
@@ -58,7 +58,6 @@ defmodule Contexsample.MixProject do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    [
-    ]
+    []
   end
 end

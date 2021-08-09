@@ -20,6 +20,7 @@
             <li><%= link "Sparkline", to: Routes.live_path(@conn, ContexSampleWeb.SparklineLive) %></li>
             <li><%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %></li>
             <li><%= link "Pie Chart", to: Routes.live_path(@conn, ContexSampleWeb.PieChartLive) %></li>
+            <li><%= link "Simple Pie Chart", to: Routes.live_path(@conn, ContexSampleWeb.SimplePieChartLive) %></li>
             <li><a href="/faq">FAQ</a></li>
           </ul>
         </nav>

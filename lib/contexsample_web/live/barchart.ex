@@ -37,16 +37,16 @@ defmodule ContexSampleWeb.BarChartLive do
               <label for="colour_scheme">Colour Scheme</label>
               <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
 
-              <label for="show_legend">Show Legend</label>
-              <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
+              <label for="legend_setting">Legend</label>
+              <%= raw_select("legend_setting", "legend_setting", legend_options(), @chart_options.legend_setting) %>
 
-              <label for="show_legend">Show Axis Labels</label>
+              <label for="show_axislabels">Show Axis Labels</label>
               <%= raw_select("show_axislabels", "show_axislabels", yes_no_options(), @chart_options.show_axislabels) %>
 
               <label for="show_data_labels">Show Data Labels</label>
               <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
 
-              <label for="show_legend">Custom Value Scale</label>
+              <label for="custom_value_scale">Custom Value Scale</label>
               <%= raw_select("custom_value_scale", "custom_value_scale", yes_no_options(), @chart_options.custom_value_scale) %>
 
               <label for="show_selected">Show Clicked Bar</label>
@@ -87,7 +87,7 @@ defmodule ContexSampleWeb.BarChartLive do
             title: nil,
             subtitle: nil,
             colour_scheme: "themed",
-            show_legend: "no"
+            legend_setting: "legend_none",
         })
       |> assign(bar_clicked: "Click a bar. Any bar", selected_bar: nil)
       |> make_test_data()
@@ -134,8 +134,10 @@ defmodule ContexSampleWeb.BarChartLive do
       select_item: selected_item
     ]
 
-    plot_options = case chart_options.show_legend do
-      "yes" -> %{legend_setting: :legend_right}
+    plot_options = case chart_options.legend_setting do
+      "legend_right" -> %{legend_setting: :legend_right}
+      "legend_top" -> %{legend_setting: :legend_top}
+      "legend_bottom" -> %{legend_setting: :legend_bottom}
       _ -> %{}
     end
 
@@ -164,8 +166,10 @@ defmodule ContexSampleWeb.BarChartLive do
       _ -> ""
     end
 
-    options = case chart_options.show_legend do
-      "yes" -> "%{legend_setting: :legend_right}"
+    options = case chart_options.legend_setting do
+      "legend_right" -> "%{legend_setting: :legend_right}"
+      "legend_top" -> "%{legend_setting: :legend_top}"
+      "legend_bottom" -> "%{legend_setting: :legend_bottom}"
       _ -> "%{}"
     end
 

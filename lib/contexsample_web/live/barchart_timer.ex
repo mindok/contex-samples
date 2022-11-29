@@ -51,29 +51,39 @@ defmodule ContexSampleWeb.BarChartTimer do
       </div>
 
     """
-
   end
 
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(chart_options: %{categories: 10, series: 4, type: :stacked, orientation: :vertical, show_selected: "no", title: nil, colour_scheme: "themed"})
+      |> assign(
+        chart_options: %{
+          categories: 10,
+          series: 4,
+          type: :stacked,
+          orientation: :vertical,
+          show_selected: "no",
+          title: nil,
+          colour_scheme: "themed"
+        }
+      )
       |> assign(counter: 0)
       |> make_test_data()
 
-    socket = case connected?(socket) do
-      true ->
-        Process.send_after(self(), :tick, 100)
-        assign(socket, show_chart: true)
-      false ->
-        assign(socket, show_chart: true)
-    end
+    socket =
+      case connected?(socket) do
+        true ->
+          Process.send_after(self(), :tick, 100)
+          assign(socket, show_chart: true)
+
+        false ->
+          assign(socket, show_chart: true)
+      end
 
     {:ok, socket}
-
   end
 
-  def handle_event("chart_options_changed", %{}=params, socket) do
+  def handle_event("chart_options_changed", %{} = params, socket) do
     socket =
       socket
       |> update_chart_options_from_params(params)
@@ -90,17 +100,22 @@ defmodule ContexSampleWeb.BarChartTimer do
   end
 
   def basic_plot(test_data, chart_options) do
+    value_scale =
+      Contex.ContinuousLinearScale.new()
+      |> Contex.ContinuousLinearScale.domain(0, chart_options.series * 2.0)
+
     options = [
       mapping: %{category_col: "Category", value_cols: chart_options.series_columns},
       type: chart_options.type,
       orientation: chart_options.orientation,
-      colour_palette: lookup_colours(chart_options.colour_scheme)
+      colour_palette: lookup_colours(chart_options.colour_scheme),
+      custom_value_scale: value_scale
     ]
 
     plot_content = BarChart.new(test_data, options)
-      |> BarChart.force_value_range({0, chart_options.series * 2.0})
 
-    plot = Plot.new(500, 400, plot_content)
+    plot =
+      Plot.new(500, 400, plot_content)
       |> Plot.titles(chart_options.title, nil)
 
     Plot.to_svg(plot)
@@ -112,17 +127,21 @@ defmodule ContexSampleWeb.BarChartTimer do
     categories = options.categories
     counter = socket.assigns.counter
 
-    data = 1..categories
-    |> Enum.map(fn cat ->
-      series_data = for s <- 1..series do
-        abs(1 + :math.sin((counter + cat + s) / 5.0))
-      end
-      ["Category #{cat}" | series_data]
-    end)
+    data =
+      1..categories
+      |> Enum.map(fn cat ->
+        series_data =
+          for s <- 1..series do
+            abs(1 + :math.sin((counter + cat + s) / 5.0))
+          end
 
-    series_cols = for i <- 1..series do
-      "Series #{i}"
-    end
+        ["Category #{cat}" | series_data]
+      end)
+
+    series_cols =
+      for i <- 1..series do
+        "Series #{i}"
+      end
 
     test_data = Dataset.new(data, ["Category" | series_cols])
 

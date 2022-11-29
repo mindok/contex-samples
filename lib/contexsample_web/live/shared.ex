@@ -12,6 +12,7 @@ defmodule ContexSampleWeb.Shared do
       |> update_type(params["type"])
       |> update_orientation(params["orientation"])
       |> Map.put(:show_legend, params["show_legend"])
+      |> Map.put(:legend_setting, params["legend_setting"])
       |> Map.put(:show_axislabels, params["show_axislabels"])
       |> Map.put(:show_data_labels, params["show_data_labels"])
       |> Map.put(:show_selected, params["show_selected"])
@@ -30,6 +31,7 @@ defmodule ContexSampleWeb.Shared do
 
   def colour_options(), do: simple_option_list(~w(default themed custom warm pastel nil))
   def yes_no_options(), do: simple_option_list(~w(yes no))
+  def legend_options(), do: simple_option_list(~w(legend_none legend_right legend_top legend_bottom))
   def chart_type_options(), do: simple_option_list(~w(stacked grouped))
   def chart_orientation_options(), do: simple_option_list(~w(vertical horizontal))
 

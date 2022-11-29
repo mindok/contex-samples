@@ -22,8 +22,8 @@ defmodule ContexSampleWeb.PieChartLive do
               <label for="categories">Number of categories</label>
               <input type="number" name="categories" id="categories" placeholder="Enter #series" value=<%= @chart_options.categories %>>
 
-              <label for="show_legend">Show Legend</label>
-              <%= raw_select("show_legend", "show_legend", yes_no_options(), @chart_options.show_legend) %>
+              <label for="legend_setting">Legend</label>
+              <%= raw_select("legend_setting", "legend_setting", legend_options(), @chart_options.legend_setting) %>
 
               <label for="show_data_labels">Show Data Labels</label>
               <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
@@ -45,7 +45,7 @@ defmodule ContexSampleWeb.PieChartLive do
         chart_options: %{
           categories: 4,
           colour_scheme: "default",
-          show_legend: "no",
+          legend_setting: "legend_none",
           show_data_labels: "yes",
           title: ""
         }
@@ -72,10 +72,14 @@ defmodule ContexSampleWeb.PieChartLive do
     ]
 
     plot_options =
-      case chart_options.show_legend do
-        "yes" -> %{legend_setting: :legend_right}
+      case chart_options.legend_setting do
+        "legend_right" -> %{legend_setting: :legend_right}
+        "legend_top" -> %{legend_setting: :legend_top}
+        "legend_bottom" -> %{legend_setting: :legend_bottom}
         _ -> %{}
       end
+
+    plot_options = Map.put(plot_options, :show_x_axis, false)
 
     plot =
       Contex.Plot.new(dataset, PieChart, 600, 400, options)

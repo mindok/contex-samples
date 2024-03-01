@@ -5,7 +5,7 @@ defmodule ContexSampleWeb.ScalesLive do
   alias Contex.{Axis, Scale, TimeScale, ContinuousLinearScale}
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h3>Fun With Scales</h3>
       <div class="container">
         <div class="row">
@@ -90,6 +90,6 @@ defmodule ContexSampleWeb.ScalesLive do
       |> ContinuousLinearScale.interval_count(intervals)
   end
 
-  defp million_formatter(value) when is_number(value), do: "#{:erlang.float_to_binary(value/1_000_000.0, [decimals: 0])}M"
+  defp million_formatter(value) when is_number(value), do: "#{:erlang.float_to_binary(value / 1_000_000.0, [decimals: 0])}M"
 
 end

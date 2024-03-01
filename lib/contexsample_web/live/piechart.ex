@@ -7,26 +7,26 @@ defmodule ContexSampleWeb.PieChartLive do
   alias Contex.PieChart
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h3>Pie Chart Example</h3>
       <div class="container">
         <div class="row">
           <div class="column column-25">
             <form phx-change="chart_options_changed">
               <label for="title">Pie Title</label>
-              <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
+              <input type="text" name="title" id="title" placeholder="Enter title" value={@chart_options.title}>
 
               <label for="colour_scheme">Colour Scheme</label>
-              <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
+              <.raw_select name={"colour_scheme"} id={"colour_scheme"} options={colour_options()} current_item={@chart_options.colour_scheme}/>
 
               <label for="categories">Number of categories</label>
-              <input type="number" name="categories" id="categories" placeholder="Enter #series" value=<%= @chart_options.categories %>>
+              <input type="number" name="categories" id="categories" placeholder="Enter #series" value={@chart_options.categories}>
 
               <label for="legend_setting">Legend</label>
-              <%= raw_select("legend_setting", "legend_setting", legend_options(), @chart_options.legend_setting) %>
+              <.raw_select name={"legend_setting"} id={"legend_setting"} options={legend_options()} current_item={@chart_options.legend_setting}/>
 
               <label for="show_data_labels">Show Data Labels</label>
-              <%= raw_select("show_data_labels", "show_data_labels", yes_no_options(), @chart_options.show_data_labels) %>
+              <.raw_select name={"show_data_labels"} id={"show_data_labels"} options={yes_no_options()} current_item={@chart_options.show_data_labels}/>
             </form>
           </div> <!-- column-23 -->
 

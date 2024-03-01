@@ -1,10 +1,17 @@
-defmodule ContexSampleWeb.PageView do
-  use ContexSampleWeb, :view
+defmodule ContexSampleWeb.PageHTML do
+  use ContexSampleWeb, :html
 
   alias Contex.{Dataset, BarChart, Plot, PointPlot, Sparkline}
 
+  embed_templates("page_html/*")
+
+  def build_ganttchart() do
+    ContexSampleWeb.GanttLive.build_ganttchart()
+  end
+
   def make_a_basic_bar_chart() do
     %{dataset: dataset, series_cols: series_cols} = make_test_bar_data(10, 4)
+
     options = [
       mapping: %{category_col: "Category", value_cols: series_cols},
       colour_palette: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
@@ -26,7 +33,8 @@ defmodule ContexSampleWeb.PageView do
       colour_palette: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
     ]
 
-    plot = Plot.new(dataset, BarChart, 500, 300, options)
+    plot =
+      Plot.new(dataset, BarChart, 500, 300, options)
       |> Plot.titles("Sample Bar Chart", nil)
 
     Plot.to_svg(plot)
@@ -46,7 +54,7 @@ defmodule ContexSampleWeb.PageView do
     Plot.to_svg(plot)
   end
 
-  defp sparkline(data) do
+  def sparkline(data) do
     Sparkline.new(data)
     |> Sparkline.draw()
   end
@@ -57,8 +65,8 @@ defmodule ContexSampleWeb.PageView do
       series_data = for _ <- 1..series do
         random_within_range(10.0, 100.0)
       end
-      ["Category #{cat}" | series_data]
-    end)
+        ["Category #{cat}" | series_data]
+      end)
 
     series_cols = for i <- 1..series do
       "Series #{i}"
@@ -80,11 +88,8 @@ defmodule ContexSampleWeb.PageView do
     Dataset.new(data, ["X", "Something", "Another"])
   end
 
-
   defp random_within_range(min, max) do
     diff = max - min
     (:rand.uniform() * diff) + min
   end
-
-
 end

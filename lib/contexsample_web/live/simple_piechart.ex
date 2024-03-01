@@ -5,17 +5,17 @@ defmodule ContexSampleWeb.SimplePieChartLive do
   alias Contex.SimplePie
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h3>Simple Pie Chart Example</h3>
       <div class="container">
         <div class="row">
           <div class="column">
             <form phx-change="chart_options_changed">
               <label for="refresh_rate">Refresh Rate</label>
-              <input type="number" name="refresh_rate" id="refresh_rate" placeholder="Enter refresh rate" value=<%= @chart_options.refresh_rate %>>
+              <input type="number" name="refresh_rate" id="refresh_rate" placeholder="Enter refresh rate" value={@chart_options.refresh_rate}>
 
               <label for="number_of_categories">Number of categories</label>
-              <input type="number" name="number_of_categories" id="number_of_categories" placeholder="Enter #series" value=<%= @chart_options.number_of_categories %>>
+              <input type="number" name="number_of_categories" id="number_of_categories" placeholder="Enter #series" value={@chart_options.number_of_categories}>
             </form>
 
             <table>
@@ -24,7 +24,7 @@ defmodule ContexSampleWeb.SimplePieChartLive do
                   <th>SVG</th>
                   <th>Data</th>
                 </tr>
-              <thead>
+              </thead>
               <tbody>
                 <%= for data <- @simple_pie_data do %>
                   <tr>

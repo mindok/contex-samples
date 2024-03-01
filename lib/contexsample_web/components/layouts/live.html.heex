@@ -1,0 +1,25 @@
+    <header>
+      <section class="container">
+        <nav class="navbar" role="navigation">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.BarChartLive)}>Simple Bar Chart</.link></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.BarChartTimer)}>Bar Chart On Timer</.link></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.PointPlotLive)}>Point Plot</.link></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.SparklineLive)}>Sparkline</.link></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.GanttLive)}>Gantt Chart</.link></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.PieChartLive)}>Pie Chart</.link></li>
+            <li><.link navigate={Routes.live_path(@socket, ContexSampleWeb.SimplePieChartLive)}>Simple Pie Chart</.link></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </nav>
+      </section>
+    </header>    
+
+    <main class="container" role="main">
+      <p class="alert alert-info" role="alert"><%= live_flash(@flash, :notice) %></p>
+      <p class="alert alert-danger" role="alert"><%= live_flash(@flash, :error) %></p>
+      <%= @inner_content %>
+
+    </main>
+

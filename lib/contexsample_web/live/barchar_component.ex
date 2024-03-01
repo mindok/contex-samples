@@ -5,12 +5,14 @@ defmodule ContexSampleWeb.BarChartComponent do
   alias Contex.{BarChart, Plot, Dataset}
 
   def render(assigns) do
-    ~L"""
+    ~H"""
+    <div>
       <div>My id is: <%= @myself %></div>
       <div><%= basic_plot(@dataset, @series_cols, @myself, @selected_bar) %></div>
 
-      <button class="button button-outline" phx-click="clear" phx-target="<%= @myself %>">Clear</button>
+      <button class="button button-outline" phx-click="clear" phx-target={@myself}>Clear</button>
       <span><em><%= @bar_clicked %></em></span>
+    </div>
     """
   end
 
@@ -40,7 +42,6 @@ defmodule ContexSampleWeb.BarChartComponent do
 
   end
 
-
   defp make_data(socket) do
     categories = 10
     series = 4
@@ -68,7 +69,7 @@ defmodule ContexSampleWeb.BarChartComponent do
       orientation: :vertical,
       colour_palette: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"],
       phx_event_handler: "bar_clicked",
-      phx_event_target: inspect(target_id),
+      phx_event_target: inspect(target_id.cid),
       select_item: selected_item
     ]
 
@@ -82,7 +83,6 @@ defmodule ContexSampleWeb.BarChartComponent do
     diff = max - min
     (:rand.uniform() * diff) + min
   end
-
 end
 
 defmodule ContexSampleWeb.MultiBarChart do
@@ -90,25 +90,25 @@ defmodule ContexSampleWeb.MultiBarChart do
   use Phoenix.HTML
 
   def render(assigns) do
-    ~L"""
+    ~H"""
+    <div>
     <section class="row">
       <article class="column">
-        <%= live_component @socket, ContexSampleWeb.BarChartComponent, id: 1 %>
+        <.live_component module={ContexSampleWeb.BarChartComponent} id="1" />
       </article>
       <article class="column">
-        <%= live_component @socket, ContexSampleWeb.BarChartComponent, id: 2 %>
+        <.live_component module={ContexSampleWeb.BarChartComponent} id="2" />
       </article>
     </section>
     <section class="row">
       <article class="column">
-        <%= live_component @socket, ContexSampleWeb.BarChartComponent, id: 3 %>
+        <.live_component module={ContexSampleWeb.BarChartComponent} id="3" />
       </article>
       <article class="column">
-        <%= live_component @socket, ContexSampleWeb.BarChartComponent, id: 4 %>
+        <.live_component module={ContexSampleWeb.BarChartComponent} id="4" />
       </article>
     </section>
+    </div>
     """
   end
-
-
 end

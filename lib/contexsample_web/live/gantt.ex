@@ -1,6 +1,6 @@
 defmodule ContexSampleWeb.GanttLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   alias Contex.{GanttChart, Dataset, Plot}
 

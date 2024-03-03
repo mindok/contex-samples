@@ -1,6 +1,7 @@
 defmodule ContexSampleWeb.BarChartComponent do
   use Phoenix.LiveComponent
-  use Phoenix.HTML
+  import Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   alias Contex.{BarChart, Plot, Dataset}
 
@@ -87,7 +88,7 @@ end
 
 defmodule ContexSampleWeb.MultiBarChart do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   def render(assigns) do
     ~H"""

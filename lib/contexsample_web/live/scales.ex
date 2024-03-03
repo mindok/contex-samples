@@ -1,6 +1,6 @@
 defmodule ContexSampleWeb.ScalesLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   alias Contex.{Axis, Scale, TimeScale, ContinuousLinearScale}
 

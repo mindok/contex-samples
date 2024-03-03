@@ -1,6 +1,6 @@
 defmodule ContexSampleWeb.SimplePieChartLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   alias Contex.SimplePie
 

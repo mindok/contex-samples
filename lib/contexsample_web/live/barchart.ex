@@ -1,6 +1,6 @@
 defmodule ContexSampleWeb.BarChartLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   import ContexSampleWeb.Shared
 

@@ -1,6 +1,6 @@
 defmodule ContexSampleWeb.SparklineLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   alias Contex.{Sparkline}
 

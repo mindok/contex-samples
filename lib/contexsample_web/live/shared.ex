@@ -1,6 +1,5 @@
 defmodule ContexSampleWeb.Shared do
-  import Phoenix.HTML
-  import Phoenix.LiveView, only: [assign: 2]
+  use Phoenix.Component
 
   def update_chart_options_from_params(socket, params) do
     options =
@@ -41,21 +40,18 @@ defmodule ContexSampleWeb.Shared do
   def lookup_colours("warm"), do: :warm
   def lookup_colours("themed"), do: ["ff9838", "fdae53", "fbc26f", "fad48e", "fbe5af", "fff5d1"]
   def lookup_colours("custom"), do: ["004c6d", "1e6181", "347696", "498caa", "5da3bf", "72bbd4", "88d3ea", "9eebff"]
+
   def lookup_colours("nil"), do: nil
   def lookup_colours(_), do: nil
 
   def simple_option_list(options), do: Enum.map(options, &%{name: &1, value: &1})
 
-  def raw_select(name, id, options, current_item) do
-    beginning_bit = ~E|<select  type="select" name="<%= name %>" id="<%= id %>">|
-
-    middle_bit = Enum.map(options, fn o ->
-      selected = if o.value == current_item, do: "selected", else: ""
-      ~E|<option value="<%= o.value %>" <%= selected %>><%= o.name %></option>|
-    end)
-
-    end_bit = ~E|</select>|
-    [beginning_bit, middle_bit, end_bit]
+  def raw_select(assigns) do
+    ~H"""
+    <select  type="select" name={@name} id={@id}>
+    <option :for={o <- @options} value={o.value} selected={o.value == @current_item}><%= o.name %></option>
+    </select>
+    """
   end
 
   def list_to_comma_string(nil), do: ""
@@ -90,7 +86,7 @@ defmodule ContexSampleWeb.Shared do
     case raw do
       "stacked" -> Map.put(options, :type, :stacked)
       "grouped" -> Map.put(options, :type, :grouped)
-      _-> Map.put(options, :type, raw)
+      _ -> Map.put(options, :type, raw)
     end
   end
 
@@ -98,7 +94,7 @@ defmodule ContexSampleWeb.Shared do
     case raw do
       "horizontal" -> Map.put(options, :orientation, :horizontal)
       "vertical" -> Map.put(options, :orientation, :vertical)
-      _-> options
+      _ -> options
     end
   end
 

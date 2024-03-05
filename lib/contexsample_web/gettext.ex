@@ -20,5 +20,5 @@ defmodule ContexSampleWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :contexsample
+  use Gettext, otp_app: :contex_sample
 end

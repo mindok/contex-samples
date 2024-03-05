@@ -1,11 +1,11 @@
 defmodule ContexSampleWeb.SparklineLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   alias Contex.{Sparkline}
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h3>Simple Sparkline Example</h3>
       <div class="container">
         <div class="row">
@@ -13,10 +13,10 @@ defmodule ContexSampleWeb.SparklineLive do
 
             <form phx-change="chart_options_changed">
               <label for="refresh_rate">Refresh Rate</label>
-              <input type="number" name="refresh_rate" id="refresh_rate" placeholder="Enter refresh rate" value=<%= @chart_options.refresh_rate %>>
+              <input type="number" name="refresh_rate" id="refresh_rate" placeholder="Enter refresh rate" value={@chart_options.refresh_rate}>
 
               <label for="number_of_points">Number of points</label>
-              <input type="number" name="number_of_points" id="number_of_points" placeholder="Enter #series" value=<%= @chart_options.number_of_points %>>
+              <input type="number" name="number_of_points" id="number_of_points" placeholder="Enter #series" value={@chart_options.number_of_points}>
             </form>
 
             <%= make_plot(@test_data) %>Something we're monitoring
@@ -66,11 +66,11 @@ defmodule ContexSampleWeb.SparklineLive do
     {:noreply, socket}
   end
 
-
   defp update_if_positive_int(map, key, possible_value) do
     case Integer.parse(possible_value) do
       {val, ""} ->
         if val > 0, do: Map.put(map, key, val), else: map
+
       _ ->
         map
     end

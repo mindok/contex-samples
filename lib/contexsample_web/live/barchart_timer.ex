@@ -1,13 +1,13 @@
 defmodule ContexSampleWeb.BarChartTimer do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   import ContexSampleWeb.Shared
 
   alias Contex.{BarChart, Plot, Dataset}
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h3>Bar Chart On A Timer Example</h3>
       <div class="container">
         <div class="row">
@@ -15,25 +15,25 @@ defmodule ContexSampleWeb.BarChartTimer do
 
              <form phx-change="chart_options_changed">
               <label for="title">Plot Title</label>
-              <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
+              <input type="text" name="title" id="title" placeholder="Enter title" value={@chart_options.title}>
 
               <label for="series">Number of series</label>
-              <input type="number" name="series" id="series" placeholder="Enter #series" value=<%= @chart_options.series %>>
+              <input type="number" name="series" id="series" placeholder="Enter #series" value={@chart_options.series}>
 
               <label for="categories">Number of categories</label>
-              <input type="number" name="categories" id="categories" placeholder="Enter #categories" value=<%= @chart_options.categories %>>
+              <input type="number" name="categories" id="categories" placeholder="Enter #categories" value={@chart_options.categories}>
 
               <label for="type">Type</label>
-              <%= raw_select("type", "type", chart_type_options(), Atom.to_string(@chart_options.type)) %>
+              <.raw_select name={"type"} id={"type"} options={chart_type_options()} current_item={Atom.to_string(@chart_options.type)}/>
 
               <label for="orientation">Orientation</label>
-              <%= raw_select("orientation", "orientation", chart_orientation_options(), Atom.to_string(@chart_options.orientation)) %>
+              <.raw_select name={"orientation"} id={"orientation"} options={chart_orientation_options()} current_item={Atom.to_string(@chart_options.orientation)}/>
 
               <label for="colour_scheme">Colour Scheme</label>
-              <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
+              <.raw_select name={"colour_scheme"} id={"colour_scheme"} options={colour_options()} current_item={@chart_options.colour_scheme}/>
 
               <label for="show_selected">Show Clicked Bar</label>
-              <%= raw_select("show_selected", "show_selected", yes_no_options(), @chart_options.show_selected) %>
+              <.raw_select name={"show_selected"} id={"show_selected"} options={yes_no_options()} current_item={@chart_options.show_selected}/>
 
             </form>
 

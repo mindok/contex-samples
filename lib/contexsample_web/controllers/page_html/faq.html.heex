@@ -5,15 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>ContEx Charts</title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <%= csrf_meta_tag() %>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <meta name="csrf-token" content={get_csrf_token()} />
   </head>
   <body>
     <header>
       <section class="ctx-hero">
          <h1><a href="/" class="">About ContEx Charts <img src="images/logo.png" height="30px"/></a></h1>
       </section>
-
       <section class="row">
         <article class="column">
         <h3>What is ContEx?</h3>
@@ -59,7 +58,7 @@
         <p><strong><a href="https://github.com/elcritch/plotex">PlotEx</a></strong>: Another pure Elixir option. More optimized for line charts with large datasets, and time series</p>
         <p><strong>DIY Server Side</strong>: There are a <a href="https://github.com/sasa1977/demo_system/">few examples around</a> showing generating SVG server side</p>
         <p><strong>Elixir wraps for JS libraries</strong>: For example, <a href="https://github.com/buren/chartkick-ex">chartkick-ex - a chartkick.js wrapper</a></p>
-        <p><strong>LiveView interop with a JS charting library</strong>: For example <a href="https://elixirforum.com/t/realtime-js-chart-in-liveview-with-hooks-what-do-you-think/27061">Highcharts with LiveView hooks</a>
+        <p><strong>LiveView interop with a JS charting library</strong>: For example <a href="https://elixirforum.com/t/realtime-js-chart-in-liveview-with-hooks-what-do-you-think/27061">Highcharts with LiveView hooks</a></p>
 
 
         <h3>Who is MindOk?</h3>
@@ -68,5 +67,6 @@
 
         </article>
       </section>
+    </header>
   </body>
 </html>

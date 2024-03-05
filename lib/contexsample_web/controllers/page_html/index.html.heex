@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ContEx Charts</title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <%= csrf_meta_tag() %>
-  </head>
-  <body>
       <section class="ctx-hero">
          <h1><img src="images/logo.png" height="30px"/> ContEx</h1>
 
@@ -44,45 +33,43 @@
           These below demos are all written as Phoenix LiveViews.
           <ul>
             <li>
-              <%= link "Simple Bar Chart", to: Routes.live_path(@conn, ContexSampleWeb.BarChartLive) %>
-              <p>Demonstrates the various options for <code>Contex.BarChart</code><p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.BarChartLive)}>Simple Bar Chart</.link>
+              <p>Demonstrates the various options for <code>Contex.BarChart</code></p>
             </li>
             <li>
-              <%= link "Bar Chart On Timer", to: Routes.live_path(@conn, ContexSampleWeb.BarChartTimer) %>
-              <p>Shows <code>Contex.BarChart</code> getting updated server-side every 100ms<p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.BarChartTimer)}>Bar Chart On Timer</.link>
+              <p>Shows <code>Contex.BarChart</code> getting updated server-side every 100ms</p>
             </li>
             <li>
-              <%= link "Point Plot / Line Plot", to: Routes.live_path(@conn, ContexSampleWeb.PointPlotLive) %>
-              <p>A simple <code>Contex.PointPlot</code> demo - also shows <code>Contex.LinePlot</code><p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.PointPlotLive)}>Point Plot / Line Plot</.link>
+              <p>A simple <code>Contex.PointPlot</code> demo - also shows <code>Contex.LinePlot</code></p>
             </li>
             <li>
-              <%= link "Sparkline", to: Routes.live_path(@conn, ContexSampleWeb.SparklineLive) %>
-              <p>A simple <code>Contex.Sparkline</code> demo<p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.SparklineLive)}>Sparkline</.link>
+              <p>A simple <code>Contex.Sparkline</code> demo</p>
             </li>
             <li>
-              <%= link "Gantt Chart", to: Routes.live_path(@conn, ContexSampleWeb.GanttLive) %>
-              <p>A super simple <code>Contex.GanttChart</code> demo<p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.GanttLive)}>Gantt Chart</.link>
+              <p>A super simple <code>Contex.GanttChart</code> demo</p>
             </li>
             <li>
-              <%= link "Pie Chart", to: Routes.live_path(@conn, ContexSampleWeb.PieChartLive) %>
-              <p>A simple <code>Contex.PieChart</code> demo<p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.PieChartLive)}>Pie Chart</.link>
+              <p>A simple <code>Contex.PieChart</code> demo</p>
             </li>
             <li>
-              <%= link "Simple Pie Chart", to: Routes.live_path(@conn, ContexSampleWeb.SimplePieChartLive) %>
-              <p>A super simple <code>Contex.SimplePie</code> demo<p>
+              <.link navigate={Routes.live_path(@conn, ContexSampleWeb.SimplePieChartLive)}>Simple Pie Chart</.link>
+              <p>A super simple <code>Contex.SimplePie</code> demo</p>
             </li>
-
-
           </ul>
         </article>
         <article class="column">
           <h2>Other Samples</h2>
           <ul>
             <li>
-              <%= link "Fun with Scales", to: Routes.live_path(@conn, ContexSampleWeb.ScalesLive) %>
+              <.link navigate={~p"/scales"}>Fun with Scales</.link>
             </li>
             <li>
-              <%= link "Barchart in LiveComponent", to: Routes.live_path(@conn, ContexSampleWeb.MultiBarChart) %>
+              <.link navigate={~p"/multibar"}>Barchart in LiveComponent</.link>
             </li>
           </ul>
           <h2>Resources</h2>
@@ -102,5 +89,3 @@
           </ul>
         </article>
       </section>
-  </body>
-</html>

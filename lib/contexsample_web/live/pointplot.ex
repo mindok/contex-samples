@@ -1,50 +1,50 @@
 defmodule ContexSampleWeb.PointPlotLive do
   use Phoenix.LiveView
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   import ContexSampleWeb.Shared
 
   alias Contex.{LinePlot, PointPlot, Dataset, Plot}
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h3>Simple Point Plot Example</h3>
       <div class="container">
         <div class="row">
           <div class="column column-25">
             <form phx-change="chart_options_changed">
               <label for="title">Plot Title</label>
-              <input type="text" name="title" id="title" placeholder="Enter title" value=<%= @chart_options.title %>>
+              <input type="text" name="title" id="title" placeholder="Enter title" value={@chart_options.title}>
 
               <label for="series">Number of series</label>
-              <input type="number" name="series" id="series" placeholder="Enter #series" value=<%= @chart_options.series %>>
+              <input type="number" name="series" id="series" placeholder="Enter #series" value={@chart_options.series}>
 
               <label for="points">Number of points</label>
-              <input type="number" name="points" id="points" placeholder="Enter #series" value=<%= @chart_options.points %>>
+              <input type="number" name="points" id="points" placeholder="Enter #series" value={@chart_options.points}>
 
               <label for="type">Type</label>
-              <%= raw_select("type", "type", simple_option_list(~w(point line)), @chart_options.type) %>
+              <.raw_select name={"type"} id={"type"} options={simple_option_list(~w(point line))} current_item={@chart_options.type}/>
 
               <label for="type">Smoothed</label>
-              <%= raw_select("smoothed", "smoothed", yes_no_options(), @chart_options.smoothed) %>
+              <.raw_select name={"smoothed"} id={"smoothed"} options={yes_no_options()} current_item={@chart_options.smoothed}/>
 
               <label for="colour_scheme">Colour Scheme</label>
-              <%= raw_select("colour_scheme", "colour_scheme", colour_options(), @chart_options.colour_scheme) %>
+              <.raw_select name={"colour_scheme"} id={"colour_scheme"} options={colour_options()} current_item={@chart_options.colour_scheme}/>
 
               <label for="legend_setting">Legend</label>
-              <%= raw_select("legend_setting", "legend_setting", legend_options(), @chart_options.legend_setting) %>
+              <.raw_select name={"legend_setting"} id={"legend_setting"} options={legend_options()} current_item={@chart_options.legend_setting}/>
 
               <label for="custom_x_scale">Custom X Scale</label>
-              <%= raw_select("custom_x_scale", "custom_x_scale", yes_no_options(), @chart_options.custom_x_scale) %>
+              <.raw_select name={"custom_x_scale"} id={"custom_x_scale"} options={yes_no_options()} current_item={@chart_options.custom_x_scale}/>
 
               <label for="custom_y_scale">Custom Y Scale</label>
-              <%= raw_select("custom_y_scale", "custom_y_scale", yes_no_options(), @chart_options.custom_y_scale) %>
+              <.raw_select name={"custom_y_scale"} id={"custom_y_scale"} options={yes_no_options()} current_item={@chart_options.custom_y_scale}/>
 
               <label for="custom_y_ticks">Custom Y Ticks</label>
-              <%= raw_select("custom_y_ticks", "custom_y_ticks", yes_no_options(), @chart_options.custom_y_ticks) %>
+              <.raw_select name={"custom_y_ticks"} id={"custom_y_ticks"} options={yes_no_options()} current_item={@chart_options.custom_y_ticks}/>
 
               <label for="time_series">Time Series</label>
-              <%= raw_select("time_series", "time_series", yes_no_options(), @chart_options.time_series) %>
+              <.raw_select name={"time_series"} id={"time_series"} options={yes_no_options()} current_item={@chart_options.time_series}/>
             </form>
           </div>
 

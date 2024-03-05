@@ -1,18 +1,19 @@
 defmodule ContexSampleWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :contexsample
+  use Phoenix.Endpoint, otp_app: :contex_sample
 
+  # The session will be stored in the cookie and signed,
+  # this means its contents can be read but not tampered with.
+  # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_contexsample_key",
-    signing_salt: "nWrB1kKO"
+    key: "_contex_sample_key",
+    signing_salt: "nWrB1kKO",
+    same_site: "Lax"
   ]
 
-  socket "/socket", ContexSampleWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
   socket "/live", Phoenix.LiveView.Socket,
-    websocket: [connect_info: [session: @session_options]]
+    websocket: [connect_info: [session: @session_options]],
+    longpoll: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -20,9 +21,9 @@ defmodule ContexSampleWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :contexsample,
+    from: :contex_sample,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt apple-touch-icon.png)
+    only: ContexSampleWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -30,7 +31,12 @@ defmodule ContexSampleWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :contex_sample
   end
+
+  plug Phoenix.LiveDashboard.RequestLogger,
+    param_key: "request_logger",
+    cookie_key: "request_logger"
 
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
@@ -42,11 +48,6 @@ defmodule ContexSampleWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
-
-  # The session will be stored in the cookie and signed,
-  # this means its contents can be read but not tampered with.
-  # Set :encryption_salt if you would also like to encrypt it.
   plug Plug.Session, @session_options
-
   plug ContexSampleWeb.Router
 end
